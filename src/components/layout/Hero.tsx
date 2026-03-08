@@ -306,6 +306,8 @@ const stats = [
   { value: 'Top 1%',label: 'TikTok Agencies'  },
 ];
 
+import { Hero3DObject } from "@/components/Hero3DObject";
+
 // ─── Hero Component ───────────────────────────────────────────────────────────
 export function Hero() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -316,6 +318,8 @@ export function Hero() {
       className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-[#01020A] pt-20"
       style={{ isolation: 'isolate' }}
     >
+      {/* ── 3D Visual Layer ────────────────────────────────────── */}
+      <Hero3DObject />
       {/* ── UE5.5 Canvas Layer ─────────────────────────────────── */}
       <canvas
         ref={canvasRef}

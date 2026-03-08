@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import { Navigation } from "@/components/layout/Navigation";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export default function RootLayout({
   children,
@@ -26,11 +27,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark scroll-smooth">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased min-h-screen selection:bg-cyan-500/30 selection:text-cyan-50`}>
-        <Navigation />
-        <div className="pt-16">
-          {children}
-        </div>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased min-h-screen selection:bg-cyan-500/30 selection:text-cyan-50 transition-colors duration-700`}>
+        <ThemeProvider>
+          <Navigation />
+          <div className="pt-16">
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

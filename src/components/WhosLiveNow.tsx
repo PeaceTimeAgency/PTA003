@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Creator } from '@/types';
+import { SkeletonCard } from '@/components/ui/SkeletonCard';
 
 const mockCreators: Creator[] = [
   { id: 1, name: 'AlexRivers', viewers: '12.4k', category: 'Gaming', avatar: 'https://i.pravatar.cc/150?u=1' },
@@ -23,6 +24,13 @@ const categoryColors: Record<string, string> = {
 };
 
 export default function WhosLiveNow() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div id="creators" className="w-full overflow-hidden py-20 relative bg-background-surface">
       {/* Top/bottom edge fades */}
@@ -50,58 +58,64 @@ export default function WhosLiveNow() {
 
       {/* Scrolling track */}
       <div className="flex w-fit animate-scroll hover:[animation-play-state:paused] gap-4 px-4">
-        {[...mockCreators, ...mockCreators].map((creator, i) => {
-          const tagClass = categoryColors[creator.category] || 'bg-white/10 text-foreground-muted';
-          return (
-            <div
-              key={`${creator.id}-${i}`}
-              className="relative shrink-0 w-60 group cursor-pointer"
-            >
-              {/* Hover glow border */}
-              <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-primary/40 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[2px]" />
-              
-              <div className="relative glass-card rounded-2xl p-4 transition-transform duration-300 group-hover:-translate-y-1.5">
-                {/* Top accent line on hover */}
-                <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+        {loading ? (
+          Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonCard key={`skel-${i}`} className="w-60 min-h-[140px] p-4 flex flex-col justify-between" />
+          ))
+        ) : (
+          [...mockCreators, ...mockCreators].map((creator, i) => {
+            const tagClass = categoryColors[creator.category] || 'bg-white/10 text-foreground-muted';
+            return (
+              <div
+                key={`${creator.id}-${i}`}
+                className="relative shrink-0 w-60 group cursor-pointer"
+              >
+                {/* Hover glow border */}
+                <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-primary/40 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[2px]" />
+                
+                <div className="relative glass-card rounded-2xl p-4 transition-transform duration-300 group-hover:-translate-y-1.5">
+                  {/* Top accent line on hover */}
+                  <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
 
-                {/* Avatar + info */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="relative flex-shrink-0">
-                    <div className="w-12 h-12 rounded-full ring-2 ring-primary/50 overflow-hidden animate-live-ring">
-                      <img
-                        src={creator.avatar}
-                        alt={creator.name}
-                        className="w-full h-full object-cover rounded-full"
+                  {/* Avatar + info */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="relative flex-shrink-0">
+                      <div className="w-12 h-12 rounded-full ring-2 ring-primary/50 overflow-hidden animate-live-ring">
+                        <img
+                          src={creator.avatar}
+                          alt={creator.name}
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      </div>
+                      <div className="absolute -bottom-0.5 -right-0.5 bg-primary text-foreground-inverse text-[9px] font-black px-1 py-px rounded-full leading-none uppercase">
+                        Live
+                      </div>
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-foreground text-sm truncate">{creator.name}</h4>
+                      <span className={`text-[11px] font-semibold px-1.5 py-0.5 rounded-md inline-block mt-0.5 ${tagClass}`}>
+                        {creator.category}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Viewer count */}
+                  <div className="flex items-center justify-between rounded-lg bg-white/[0.04] border border-white/[0.06] px-3 py-2">
+                    <div className="flex items-center gap-1.5 text-xs text-foreground-muted">
+                      <motion.span
+                        animate={{ opacity: [1, 0.3, 1] }}
+                        transition={{ repeat: Infinity, duration: 1.8 }}
+                        className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"
                       />
+                      {creator.viewers} watching
                     </div>
-                    <div className="absolute -bottom-0.5 -right-0.5 bg-primary text-foreground-inverse text-[9px] font-black px-1 py-px rounded-full leading-none uppercase">
-                      Live
-                    </div>
+                    <span className="text-[10px] text-foreground-subtle font-medium">PTA</span>
                   </div>
-                  <div className="min-w-0">
-                    <h4 className="font-bold text-foreground text-sm truncate">{creator.name}</h4>
-                    <span className={`text-[11px] font-semibold px-1.5 py-0.5 rounded-md inline-block mt-0.5 ${tagClass}`}>
-                      {creator.category}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Viewer count */}
-                <div className="flex items-center justify-between rounded-lg bg-white/[0.04] border border-white/[0.06] px-3 py-2">
-                  <div className="flex items-center gap-1.5 text-xs text-foreground-muted">
-                    <motion.span
-                      animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ repeat: Infinity, duration: 1.8 }}
-                      className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"
-                    />
-                    {creator.viewers} watching
-                  </div>
-                  <span className="text-[10px] text-foreground-subtle font-medium">PTA</span>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </div>
   );

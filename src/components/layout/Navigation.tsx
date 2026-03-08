@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/Button";
 import { useState, useEffect } from "react";
 
 const NAV_LINKS = [
-  { name: "Creators", href: "/#creators" },
+  { name: "Creators", href: "/creators" },
+  { name: "News", href: "/news" },
   { name: "Services", href: "/#services" },
   { name: "Community", href: "/#community" },
   { name: "FAQ", href: "/#faq" },
@@ -56,12 +57,14 @@ export function Navigation() {
 
         {/* CTA */}
         <div className="flex items-center gap-3">
-          <Button
-            size="sm"
-            className="hidden sm:inline-flex rounded-lg px-5 h-9 font-semibold text-sm bg-primary hover:bg-primary-dark text-foreground-inverse transition-all duration-200 hover:shadow-neon-primary"
-          >
-            Join the Roster
-          </Button>
+          <Link href="/apply">
+            <Button
+              size="sm"
+              className="hidden sm:inline-flex rounded-lg px-5 h-9 font-semibold text-sm bg-primary hover:bg-primary-dark text-foreground-inverse transition-all duration-200 hover:shadow-neon-primary"
+            >
+              Join the Roster
+            </Button>
+          </Link>
 
           {/* Mobile Menu */}
           <button className="md:hidden p-2 text-foreground-muted hover:text-foreground transition-colors rounded-lg hover:bg-white/[0.04]">
