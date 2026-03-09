@@ -440,7 +440,7 @@ export function Hero() {
           className="flex flex-col gap-4 sm:flex-row items-center justify-center pt-1 w-full"
         >
           {/* Primary CTA */}
-          <Link href="/apply"
+          <Link href="/api/auth/tiktok"
             className="group relative inline-flex items-center justify-center h-[52px] px-8 rounded-xl font-bold text-sm text-white overflow-hidden transition-all duration-300"
             style={{
               background:  'linear-gradient(135deg, #FF3C5F 0%, #E0244C 100%)',

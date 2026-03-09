@@ -57,7 +57,7 @@ export function Navigation() {
 
         {/* CTA */}
         <div className="flex items-center gap-3">
-          <Link href="/apply">
+          <Link href="/api/auth/tiktok">
             <Button
               size="sm"
               className="hidden sm:inline-flex rounded-lg px-5 h-9 font-semibold text-sm bg-primary hover:bg-primary-dark text-foreground-inverse transition-all duration-200 hover:shadow-neon-primary"

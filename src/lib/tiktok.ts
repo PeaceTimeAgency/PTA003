@@ -19,6 +19,8 @@ export interface TikTokProfile {
   display_name: string;
   username: string;
   follower_count?: number;
+  likes_count?: number;
+  latest_video_cover?: string;
 }
 
 export function getTikTokAuthUrl(state: string) {
@@ -26,7 +28,7 @@ export function getTikTokAuthUrl(state: string) {
     return `/api/auth/tiktok/callback?code=mock_code&state=${state}`;
   }
 
-  const scope = "user.info.basic,video.list,user.stats";
+  const scope = "user.info.profile,user.info.stats,video.list";
   const url = new URL("https://www.tiktok.com/v2/auth/authorize/");
   url.searchParams.append("client_key", TIKTOK_CLIENT_ID);
   url.searchParams.append("scope", scope);
@@ -79,6 +81,8 @@ export async function getTikTokProfile(accessToken: string): Promise<TikTokProfi
       display_name: "Mock Creator",
       username: "mock_creator_66",
       follower_count: 54200,
+      likes_count: 1250000,
+      latest_video_cover: "https://images.unsplash.com/photo-1616469829581-73993eb86b02?q=80&w=200&h=300&auto=format&fit=crop",
     };
   }
 
@@ -96,5 +100,6 @@ export async function getTikTokProfile(accessToken: string): Promise<TikTokProfi
   return {
     ...data.user,
     follower_count: data.user.follower_count, // TikTok API structure varies, mapping here
+    likes_count: data.user.likes_count,
   };
 }

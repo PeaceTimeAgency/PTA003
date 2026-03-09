@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Section } from "@/components/layout/Section";
+import Link from "next/link";
 
 const faqs = [
   {
@@ -82,9 +83,9 @@ export function FAQ() {
             <span className="text-gradient-primary">Join the network.</span>
           </h3>
           <p className="text-foreground-muted text-sm mb-8 max-w-md mx-auto">Apply today and connect with the elite TikTok LIVE creator community.</p>
-          <button className="inline-flex items-center justify-center h-12 px-10 rounded-xl font-semibold text-sm text-foreground-inverse bg-primary hover:bg-primary-dark transition-all duration-200 hover:shadow-neon-primary">
+          <Link href="/api/auth/tiktok" className="inline-flex items-center justify-center h-12 px-10 rounded-xl font-semibold text-sm text-foreground-inverse bg-primary hover:bg-primary-dark transition-all duration-200 hover:shadow-neon-primary">
             Submit Application
-          </button>
+          </Link>
         </div>
       </div>
     </Section>

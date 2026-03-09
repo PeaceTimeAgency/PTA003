@@ -92,7 +92,7 @@ export default function ArticlePage() {
 
            <div className="mt-20 pt-12 border-t border-white/5 flex flex-col items-center">
               <h3 className="text-sm font-black text-white uppercase tracking-[0.3em] mb-6">Ready to scale?</h3>
-              <Link href="/apply" className="px-12 py-4 bg-primary hover:bg-primary-dark text-white font-black rounded-2xl transition-all uppercase tracking-[0.2em] shadow-xl shadow-primary/20">
+              <Link href="/api/auth/tiktok" className="px-12 py-4 bg-primary hover:bg-primary-dark text-white font-black rounded-2xl transition-all uppercase tracking-[0.2em] shadow-xl shadow-primary/20">
                 Join the Roster
               </Link>
            </div>

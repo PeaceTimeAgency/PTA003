@@ -19,9 +19,9 @@ export async function GET(req: NextRequest) {
   try {
     const tokenData = await exchangeTikTokCode(code);
     
-    // In this implementation, we'll return the user to /apply with the token in a temporary cookie
+    // In this implementation, we'll return the user to /auth-success with the token in a temporary cookie
     // or as a query param (cookie is safer). Let's use a temporary cookie for simplicity.
-    const response = NextResponse.redirect(new URL("/apply?connected=true", req.url));
+    const response = NextResponse.redirect(new URL("/auth-success", req.url));
     response.cookies.set("tiktok_access_token", tokenData.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

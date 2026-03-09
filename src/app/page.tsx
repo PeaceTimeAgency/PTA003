@@ -1,6 +1,6 @@
 import { Hero } from "@/components/layout/Hero";
 import { Services } from "@/components/layout/Services";
-import { Spotlight } from "@/components/layout/Spotlight";
+import { OurCreators } from "@/components/layout/OurCreators";
 import { GrowthPhases } from "@/components/layout/GrowthPhases";
 import { FAQ } from "@/components/layout/FAQ";
 import { Footer } from "@/components/layout/Footer";
@@ -16,7 +16,7 @@ export default function Home() {
       <WhosLiveNow />
       <Services />
       <GrowthPhases />
-      <Spotlight />
+      <OurCreators />
 
       {/* Analytics + Community side by side */}
       <Section id="system" className="bg-background-surface">
