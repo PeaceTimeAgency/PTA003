@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased min-h-screen selection:bg-cyan-500/30 selection:text-cyan-50 transition-colors duration-700`}>
         <ThemeProvider>
           <Navigation />

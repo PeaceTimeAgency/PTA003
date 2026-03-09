@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { useState, useEffect } from "react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NAV_LINKS = [
   { name: "Creators", href: "/#creators" },
@@ -57,6 +58,8 @@ export function Navigation() {
 
         {/* CTA */}
         <div className="flex items-center gap-3">
+          <ThemeToggle />
+          
           <Link href="/api/auth/tiktok">
             <Button
               size="sm"

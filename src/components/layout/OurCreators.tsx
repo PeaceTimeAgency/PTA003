@@ -98,16 +98,9 @@ const CreatorGrid = ({ title, desc, list, isLiveSection = false, isUserSection =
 
 export function OurCreators() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [userProfile, setUserProfile] = useState<any>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [liveCreators, setLiveCreators] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('/api/tiktok/profile')
-      .then(res => res.ok ? res.json() : null)
-      .then(data => { if (data && !data.error) setUserProfile(data); })
-      .catch(console.error);
-
     fetch('/api/tiktok/live')
       .then(res => res.ok ? res.json() : null)
       .then(data => {
@@ -118,22 +111,6 @@ export function OurCreators() {
       .catch(console.error);
   }, []);
 
-  const userCreatorItem: Creator | null = userProfile ? {
-    id: "user-profile",
-    name: userProfile.display_name,
-    handle: `@${userProfile.username}`,
-    description: "Your connected TikTok Profile",
-    image: userProfile.latest_video_cover || userProfile.avatar_url,
-    category: "Applicant",
-    stats: {
-      followers: userProfile.follower_count ? `${(userProfile.follower_count / 1000).toFixed(1)}k` : "0",
-      avgWatchTime: "--",
-      peakCCV: "--",
-      totalLikes: userProfile.likes_count ? `${(userProfile.likes_count / 1000000).toFixed(1)}M` : "0"
-    },
-    tags: ["Connected", "Profile"],
-    socials: { tiktok: `https://tiktok.com/@${userProfile.username}` }
-  } : null;
 
   const liveHandles = liveCreators.map(lc => lc.username.toLowerCase());
   const liveRoster = creators.filter(c => liveHandles.includes(c.handle.toLowerCase()));
@@ -188,14 +165,7 @@ export function OurCreators() {
         </div>
 
         <div className="px-4 md:px-8 lg:px-12">
-          {userCreatorItem && (
-             <CreatorGrid 
-               title="Your Profile" 
-               desc="Real-time preview of your connected account data before submitting." 
-               list={[userCreatorItem]} 
-               isUserSection={true}
-             />
-          )}
+
           {liveRoster.length > 0 && (
              <CreatorGrid 
                title="Live Now" 
@@ -241,11 +211,31 @@ export function OurCreators() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <CreatorGrid 
-              title={selectedTag ? `${selectedTag} Creators` : "All Creators & Staff"} 
-              desc={selectedTag ? `Showing creators specialized in ${selectedTag}.` : "The complete Peace Time Agency roster and leadership."} 
-              list={filteredCreators} 
-            />
+            {selectedTag ? (
+              <CreatorGrid 
+                title={`${selectedTag} Creators`} 
+                desc={`Showing creators specialized in ${selectedTag}.`} 
+                list={filteredCreators} 
+              />
+            ) : (
+              <div className="flex flex-col">
+                <CreatorGrid 
+                  title="Agency Staff" 
+                  desc="The leadership driving Peace Time Agency." 
+                  list={filteredCreators.filter(c => c.tier === 'staff')} 
+                />
+                <CreatorGrid 
+                  title="Top 5 Creators" 
+                  desc="Our highest performing talent on the platform." 
+                  list={filteredCreators.filter(c => c.tier === 'top')} 
+                />
+                <CreatorGrid 
+                  title="5 Newest Accepted" 
+                  desc="The latest talent to join the Peace Time ecosystem." 
+                  list={filteredCreators.filter(c => c.tier === 'new')} 
+                />
+              </div>
+            )}
           </motion.div>
         </div>
       </div>

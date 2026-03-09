@@ -23,8 +23,8 @@
     --color-foreground-inverse-base: #080C14;
   }
 
-  /* Day Theme Override */
-  .theme-day {
+  /* Light Theme Override */
+  .light {
     --color-background-base: #F8FAFC;
     --color-background-surface-base: #FFFFFF;
     --color-background-elevated-base: #F1F5F9;
