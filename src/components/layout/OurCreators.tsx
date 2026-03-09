@@ -138,9 +138,15 @@ export function OurCreators() {
   const liveHandles = liveCreators.map(lc => lc.username.toLowerCase());
   const liveRoster = creators.filter(c => liveHandles.includes(c.handle.toLowerCase()));
   
-  const staff = creators.filter(c => c.tier === 'staff' && !liveRoster.some(lc => lc.id === c.id));
-  const top = creators.filter(c => c.tier === 'top' && !liveRoster.some(lc => lc.id === c.id));
-  const newest = creators.filter(c => c.tier === 'new' && !liveRoster.some(lc => lc.id === c.id));
+  // Extract all unique tags
+  const allTags = Array.from(new Set(creators.flatMap(c => c.tags))).sort();
+
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+  // Filter creators based on the selected tag
+  const filteredCreators = selectedTag
+    ? creators.filter(c => c.tags.includes(selectedTag))
+    : creators;
 
   return (
     <Section id="creators" className="relative overflow-hidden bg-background-surface border-y border-border">
@@ -151,7 +157,7 @@ export function OurCreators() {
       <div className="absolute right-1/4 top-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-primary/8 blur-[100px] pointer-events-none" />
 
       <div className="relative z-10">
-        <div className="mb-16 text-center max-w-4xl mx-auto px-4">
+        <div className="mb-12 text-center max-w-4xl mx-auto px-4">
           <motion.p
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -198,21 +204,49 @@ export function OurCreators() {
                isLiveSection={true}
              />
           )}
-          <CreatorGrid 
-            title="PTA Staff" 
-            desc="The leadership and technical architects powering the infrastructure." 
-            list={staff} 
-          />
-          <CreatorGrid 
-            title="Top 5 Performing" 
-            desc="Our highest-grossing and most engaged creators right now." 
-            list={top} 
-          />
-          <CreatorGrid 
-            title="5 Newest Accepted" 
-            desc="The latest elite talent globally to join the Peace Time network." 
-            list={newest} 
-          />
+
+          {/* Tag Filter System */}
+          <div className="mb-12 flex flex-col items-center">
+            <h3 className="text-sm font-semibold text-foreground-muted uppercase tracking-widest mb-4">Filter by Category</h3>
+            <div className="flex flex-wrap justify-center gap-2 max-w-4xl">
+              <button
+                onClick={() => setSelectedTag(null)}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 border ${
+                  selectedTag === null
+                    ? "bg-primary text-white border-primary shadow-neon-primary"
+                    : "bg-white/5 text-white/60 border-white/10 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                All Creators
+              </button>
+              {allTags.map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => setSelectedTag(tag)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 border ${
+                    selectedTag === tag
+                      ? "bg-primary text-white border-primary shadow-neon-primary"
+                      : "bg-white/5 text-white/60 border-white/10 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <motion.div
+            key={selectedTag || "all"}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <CreatorGrid 
+              title={selectedTag ? `${selectedTag} Creators` : "All Creators & Staff"} 
+              desc={selectedTag ? `Showing creators specialized in ${selectedTag}.` : "The complete Peace Time Agency roster and leadership."} 
+              list={filteredCreators} 
+            />
+          </motion.div>
         </div>
       </div>
     </Section>

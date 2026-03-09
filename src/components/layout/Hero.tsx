@@ -454,7 +454,7 @@ export function Hero() {
           </Link>
 
           {/* Secondary CTA */}
-          <Link href="/creators"
+          <Link href="/#creators"
             className="group inline-flex items-center justify-center h-[52px] px-8 rounded-xl font-semibold text-sm gap-2 transition-all duration-300"
             style={{
               background:     'rgba(255,255,255,0.035)',
