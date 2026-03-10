@@ -18,7 +18,7 @@ function hash2(x: number, y: number): number {
 function valueNoise(x: number, y: number): number {
   const ix = Math.floor(x), iy = Math.floor(y);
   const fx = x - ix, fy = y - iy;
-  const a = hash2(ix, iy),     b = hash2(ix + 1, iy);
+  const a = hash2(ix, iy), b = hash2(ix + 1, iy);
   const c = hash2(ix, iy + 1), d = hash2(ix + 1, iy + 1);
   const sx = smoothstepN(fx), sy = smoothstepN(fy);
   return lerp(lerp(a, b, sx), lerp(c, d, sx), sy);
@@ -52,51 +52,51 @@ function createParticle(w: number, h: number): Particle {
 
 // ── Main Canvas Renderer ─────────────────────────────────────────────────────
 function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
-  const rafRef        = useRef<number>(0);
-  const particlesRef  = useRef<Particle[]>([]);
-  const mouseRef      = useRef({ x: 0.5, y: 0.5 });
+  const rafRef = useRef<number>(0);
+  const particlesRef = useRef<Particle[]>([]);
+  const mouseRef = useRef({ x: 0.5, y: 0.5 });
 
   const draw = useCallback((ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => {
     ctx.clearRect(0, 0, w, h);
 
     // ── 1. Sky ──────────────────────────────────────────────────────────────
     const sky = ctx.createLinearGradient(0, 0, 0, h * 0.72);
-    sky.addColorStop(0,    '#01020A');
+    sky.addColorStop(0, '#01020A');
     sky.addColorStop(0.28, '#040916');
     sky.addColorStop(0.55, '#0B1830');
     sky.addColorStop(0.78, '#12233D');
-    sky.addColorStop(1,    '#1A3060');
+    sky.addColorStop(1, '#1A3060');
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, w, h);
 
     // ── 2. Horizon Glow ─────────────────────────────────────────────────────
     const horizonY = h * 0.58;
     const hGlow = ctx.createRadialGradient(w * 0.5, horizonY, 0, w * 0.5, horizonY, w * 0.75);
-    hGlow.addColorStop(0,   'rgba(255,60,95,0.22)');
+    hGlow.addColorStop(0, 'rgba(255,60,95,0.22)');
     hGlow.addColorStop(0.3, 'rgba(160,100,255,0.11)');
     hGlow.addColorStop(0.7, 'rgba(30,60,120,0.06)');
-    hGlow.addColorStop(1,   'rgba(0,0,0,0)');
+    hGlow.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = hGlow;
     ctx.fillRect(0, 0, w, h);
 
     // ── 3. God Rays ─────────────────────────────────────────────────────────
     const rayOriginX = w * (0.5 + (mouseRef.current.x - 0.5) * 0.08);
     const rayOriginY = -h * 0.05;
-    const rayCount   = 9;
+    const rayCount = 9;
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
     for (let i = 0; i < rayCount; i++) {
-      const spread  = 0.55;
-      const angle   = (-spread / 2) + (spread / (rayCount - 1)) * i;
-      const endX    = rayOriginX + Math.sin(angle) * w * 1.4;
-      const endY    = horizonY + h * 0.22;
+      const spread = 0.55;
+      const angle = (-spread / 2) + (spread / (rayCount - 1)) * i;
+      const endX = rayOriginX + Math.sin(angle) * w * 1.4;
+      const endY = horizonY + h * 0.22;
       const opacity = (0.025 + Math.sin(t * 0.0004 + i) * 0.008) * (i === 4 ? 1.6 : 1);
       const rayWidth = (80 + i * 12) * (w / 1400);
 
       const rayGrad = ctx.createLinearGradient(rayOriginX, rayOriginY, endX, endY);
-      rayGrad.addColorStop(0,   `rgba(255,220,180,${Math.min(1, opacity * 2)})`);
+      rayGrad.addColorStop(0, `rgba(255,220,180,${Math.min(1, opacity * 2)})`);
       rayGrad.addColorStop(0.5, `rgba(255,180,140,${Math.min(1, opacity)})`);
-      rayGrad.addColorStop(1,   'rgba(255,150,120,0)');
+      rayGrad.addColorStop(1, 'rgba(255,150,120,0)');
 
       ctx.beginPath();
       ctx.moveTo(rayOriginX - rayWidth * 0.15, rayOriginY);
@@ -111,23 +111,23 @@ function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
 
     // ── 4. Terrain Layers (UE5.5 Multi-Pass) ────────────────────────────────
     const terrainLayers = [
-      { yB: 0.90, yS: 0.35, nS: 0.9, nO: 80.0, c: ['#0A1220', '#080E1A'] as const, a: 1.0  },
+      { yB: 0.90, yS: 0.35, nS: 0.9, nO: 80.0, c: ['#0A1220', '#080E1A'] as const, a: 1.0 },
       { yB: 0.83, yS: 0.28, nS: 1.4, nO: 50.0, c: ['#111D30', '#0D1726'] as const, a: 0.97 },
       { yB: 0.75, yS: 0.26, nS: 1.9, nO: 20.5, c: ['#1A2E48', '#152440'] as const, a: 0.90 },
       { yB: 0.68, yS: 0.22, nS: 2.8, nO: 10.0, c: ['#223558', '#1C2C4A'] as const, a: 0.82 },
-      { yB: 0.61, yS: 0.16, nS: 3.8, nO: 0.5,  c: ['#2B405E', '#223550'] as const, a: 0.60 },
+      { yB: 0.61, yS: 0.16, nS: 3.8, nO: 0.5, c: ['#2B405E', '#223550'] as const, a: 0.60 },
     ];
 
-    const driftX  = (mouseRef.current.x - 0.5) * 28;
-    const driftY  = (mouseRef.current.y - 0.5) * 12;
+    const driftX = (mouseRef.current.x - 0.5) * 28;
+    const driftY = (mouseRef.current.y - 0.5) * 12;
     const timeSlow = t * 0.00005;
 
     terrainLayers.forEach((layer, li) => {
-      const pts    = Math.ceil(w / 2) + 2;
-      const baseY  = h * layer.yB;
+      const pts = Math.ceil(w / 2) + 2;
+      const baseY = h * layer.yB;
       const scaleY = h * layer.yS;
-      const noise  = layer.nS;
-      const nOff   = layer.nO;
+      const noise = layer.nS;
+      const nOff = layer.nO;
       const pFactor = (terrainLayers.length - li) * 0.018;
 
       // Helper to compute terrain Y for a given screen X
@@ -167,13 +167,13 @@ function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         // Clamp gradient color stop to [0,1]
         const shimStop = Math.max(0, Math.min(1, 0.3 + Math.sin(t * 0.0006 + li) * 0.15));
         const shimGrad = ctx.createLinearGradient(0, 0, w, 0);
-        shimGrad.addColorStop(0,         'rgba(255,60,95,0)');
-        shimGrad.addColorStop(shimStop,  `rgba(255,100,140,${0.06 + li * 0.018})`);
+        shimGrad.addColorStop(0, 'rgba(255,60,95,0)');
+        shimGrad.addColorStop(shimStop, `rgba(255,100,140,${0.06 + li * 0.018})`);
         shimGrad.addColorStop(Math.min(1, shimStop + 0.3), `rgba(167,139,250,${0.04 + li * 0.01})`);
-        shimGrad.addColorStop(1,         'rgba(167,139,250,0)');
+        shimGrad.addColorStop(1, 'rgba(167,139,250,0)');
 
         ctx.strokeStyle = shimGrad;
-        ctx.lineWidth   = 1.2 + li * 0.4;
+        ctx.lineWidth = 1.2 + li * 0.4;
         ctx.globalAlpha = 0.7;
         ctx.globalCompositeOperation = 'screen';
         ctx.stroke();
@@ -187,9 +187,9 @@ function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     for (let fi = 0; fi < 5; fi++) {
       const fogAlpha = Math.max(0, (0.13 - fi * 0.02) * (1 + (mouseRef.current.y - 0.5) * 0.2));
       const fGrad = ctx.createLinearGradient(0, fogY + fi * h * 0.04, 0, fogY + (fi + 1) * h * 0.055);
-      fGrad.addColorStop(0,   `rgba(30,50,100,${fogAlpha})`);
+      fGrad.addColorStop(0, `rgba(30,50,100,${fogAlpha})`);
       fGrad.addColorStop(0.5, `rgba(20,35,80,${fogAlpha * 0.6})`);
-      fGrad.addColorStop(1,   'rgba(10,20,50,0)');
+      fGrad.addColorStop(1, 'rgba(10,20,50,0)');
       ctx.fillStyle = fGrad;
       ctx.fillRect(0, fogY + fi * h * 0.04, w, h * 0.06);
     }
@@ -210,9 +210,9 @@ function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       }
       // draw
       const pGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3.5);
-      pGlow.addColorStop(0,   `hsla(${p.hue},90%,75%,${p.alpha})`);
+      pGlow.addColorStop(0, `hsla(${p.hue},90%,75%,${p.alpha})`);
       pGlow.addColorStop(0.4, `hsla(${p.hue},80%,60%,${p.alpha * 0.4})`);
-      pGlow.addColorStop(1,   `hsla(${p.hue},70%,50%,0)`);
+      pGlow.addColorStop(1, `hsla(${p.hue},70%,50%,0)`);
       ctx.fillStyle = pGlow;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size * 3.5, 0, Math.PI * 2);
@@ -222,15 +222,15 @@ function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
 
     // ── 7. Vignette ──────────────────────────────────────────────────────────
     const vig = ctx.createRadialGradient(w * 0.5, h * 0.5, h * 0.1, w * 0.5, h * 0.5, w * 0.75);
-    vig.addColorStop(0,   'rgba(0,0,0,0)');
+    vig.addColorStop(0, 'rgba(0,0,0,0)');
     vig.addColorStop(0.6, 'rgba(0,0,0,0.12)');
-    vig.addColorStop(1,   'rgba(0,0,0,0.65)');
+    vig.addColorStop(1, 'rgba(0,0,0,0.65)');
     ctx.fillStyle = vig;
     ctx.fillRect(0, 0, w, h);
 
     // ── 8. Scanlines ─────────────────────────────────────────────────────────
     ctx.globalAlpha = 0.025;
-    ctx.fillStyle   = '#000';
+    ctx.fillStyle = '#000';
     for (let y = 0; y < h; y += 3) {
       ctx.fillRect(0, y, w, 1);
     }
@@ -256,12 +256,12 @@ function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
-      const w   = canvas.offsetWidth;
-      const h   = canvas.offsetHeight;
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
 
       // Reset transform BEFORE setting dimensions to avoid DPR accumulation
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-      canvas.width  = w * dpr;
+      canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.scale(dpr, dpr);
 
@@ -273,7 +273,7 @@ function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       const rect = canvas.getBoundingClientRect();
       mouseRef.current = {
         x: Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)),
-        y: Math.max(0, Math.min(1, (e.clientY - rect.top)  / rect.height)),
+        y: Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height)),
       };
     };
 
@@ -284,7 +284,7 @@ function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     let startTime: number | null = null;
     const loop = (ts: number) => {
       rafRef.current = requestAnimationFrame(loop);
-      
+
       if (!isVisible) return; // Skip drawing when off-screen
 
       if (!startTime) startTime = ts;
@@ -315,7 +315,7 @@ const fadeUp = {
 
 // ── Stats ────────────────────────────────────────────────────────────────────
 const stats = [
-  { value: '24/7',  label: 'Creator Support System' },
+  { value: '24/7', label: 'Creator Support System' },
   { value: 'Top Tier', label: 'TikTok LIVE Creator Network' },
   { value: 'Millions', label: 'LIVE Viewers Reached' },
   { value: '250+', label: 'Active Creators' },
@@ -375,9 +375,9 @@ export function Hero() {
           custom={0} initial="hidden" animate="show" variants={fadeUp}
           className="inline-flex items-center gap-2.5 rounded-full px-5 py-2 text-xs font-bold tracking-[0.22em] uppercase"
           style={{
-            background:  'linear-gradient(135deg, rgba(255,60,95,0.12) 0%, rgba(167,139,250,0.08) 100%)',
-            border:      '1px solid rgba(255,60,95,0.28)',
-            boxShadow:   '0 0 24px rgba(255,60,95,0.15), inset 0 1px 0 rgba(255,255,255,0.06)',
+            background: 'linear-gradient(135deg, rgba(255,60,95,0.12) 0%, rgba(167,139,250,0.08) 100%)',
+            border: '1px solid rgba(255,60,95,0.28)',
+            boxShadow: '0 0 24px rgba(255,60,95,0.15), inset 0 1px 0 rgba(255,255,255,0.06)',
           }}
         >
           <span className="relative flex h-2 w-2" aria-hidden="true">
@@ -389,10 +389,10 @@ export function Hero() {
           </span>
           <span
             style={{
-              background:            'linear-gradient(90deg, #FF3C5F 0%, #FF8FA3 50%, #A78BFA 100%)',
-              WebkitBackgroundClip:  'text',
-              WebkitTextFillColor:   'transparent',
-              backgroundClip:        'text',
+              background: 'linear-gradient(90deg, #FF3C5F 0%, #FF8FA3 50%, #A78BFA 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
             }}
           >
             Peace Time Agency
@@ -406,10 +406,10 @@ export function Hero() {
         >
           <span
             style={{
-              background:           'linear-gradient(180deg, #FFFFFF 0%, rgba(210,225,255,0.82) 100%)',
+              background: 'linear-gradient(180deg, #FFFFFF 0%, rgba(210,225,255,0.82) 100%)',
               WebkitBackgroundClip: 'text',
-              WebkitTextFillColor:  'transparent',
-              backgroundClip:       'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
             }}
           >
             The Creator Agency
@@ -417,11 +417,11 @@ export function Hero() {
           <br />
           <span
             style={{
-              background:           'linear-gradient(135deg, #FF3C5F 0%, #FF7A8A 40%, #A78BFA 100%)',
+              background: 'linear-gradient(135deg, #FF3C5F 0%, #FF7A8A 40%, #A78BFA 100%)',
               WebkitBackgroundClip: 'text',
-              WebkitTextFillColor:  'transparent',
-              backgroundClip:       'text',
-              filter:               'drop-shadow(0 0 32px rgba(255,60,95,0.45))',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              filter: 'drop-shadow(0 0 32px rgba(255,60,95,0.45))',
             }}
           >
             Built for Streamers.
@@ -446,8 +446,8 @@ export function Hero() {
           <Link href="/api/auth/tiktok"
             className="group relative inline-flex items-center justify-center h-[52px] px-8 rounded-xl font-bold text-sm text-white overflow-hidden transition-all duration-300"
             style={{
-              background:  'linear-gradient(135deg, #FF3C5F 0%, #E0244C 100%)',
-              boxShadow:   '0 0 0 1px rgba(255,60,95,0.4), 0 4px 24px rgba(255,60,95,0.3)',
+              background: 'linear-gradient(135deg, #FF3C5F 0%, #E0244C 100%)',
+              boxShadow: '0 0 0 1px rgba(255,60,95,0.4), 0 4px 24px rgba(255,60,95,0.3)',
             }}
             onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 0 0 1px rgba(255,60,95,0.6), 0 8px 40px rgba(255,60,95,0.5)')}
             onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 0 0 1px rgba(255,60,95,0.4), 0 4px 24px rgba(255,60,95,0.3)')}
@@ -460,10 +460,10 @@ export function Hero() {
           <Link href="/#creators"
             className="group inline-flex items-center justify-center h-[52px] px-8 rounded-xl font-semibold text-sm gap-2 transition-all duration-300"
             style={{
-              background:     'rgba(255,255,255,0.035)',
-              border:         '1px solid rgba(255,255,255,0.1)',
+              background: 'rgba(255,255,255,0.035)',
+              border: '1px solid rgba(255,255,255,0.1)',
               backdropFilter: 'blur(12px)',
-              color:          'rgba(255,255,255,0.75)',
+              color: 'rgba(255,255,255,0.75)',
             }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.035)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
@@ -485,29 +485,28 @@ export function Hero() {
           custom={5} initial="hidden" animate="show" variants={fadeUp}
           className="grid grid-cols-2 md:grid-cols-4 mt-14 w-full max-w-3xl rounded-2xl overflow-hidden"
           style={{
-            background:     'linear-gradient(145deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.02) 100%)',
+            background: 'linear-gradient(145deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.02) 100%)',
             backdropFilter: 'blur(24px)',
-            border:         '1px solid rgba(255,255,255,0.075)',
-            boxShadow:      '0 8px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.075)',
+            boxShadow: '0 8px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06)',
           }}
         >
           {stats.map((s, i) => (
             <div
               key={s.label}
-              className="group flex flex-col items-center justify-center py-7 px-4 cursor-default transition-all duration-300 hover:bg-white/[0.03]"
-              style={{
-                borderRight: i < stats.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
-                borderTop:   i >= 2               ? '1px solid rgba(255,255,255,0.06)' : 'none',
-              }}
+              className={`group flex flex-col items-center justify-center py-7 px-4 cursor-default transition-all duration-300 hover:bg-white/[0.03] border-white/[0.06] ${i === 0 ? 'border-r border-b md:border-b-0' :
+                  i === 1 ? 'border-b md:border-b-0 md:border-r' :
+                    i === 2 ? 'border-r' : ''
+                }`}
             >
               <span
                 className="text-2xl md:text-3xl font-black transition-all duration-300"
                 style={{
-                  background:           'linear-gradient(135deg, #FFFFFF 30%, rgba(167,139,250,0.8) 100%)',
+                  background: 'linear-gradient(135deg, #FFFFFF 30%, rgba(167,139,250,0.8) 100%)',
                   WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor:  'transparent',
-                  backgroundClip:       'text',
-                  filter:               'drop-shadow(0 0 12px rgba(255,255,255,0.15))',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.15))',
                 }}
               >
                 {s.value}
