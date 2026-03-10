@@ -1,87 +1,148 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Section } from "@/components/layout/Section";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { creators } from "@/lib/creators";
 
-const steps = [
-  {
-    id: "welcome",
-    title: "Start Your Journey",
-    subtitle: "Tell us who you are. We'll handle the rest.",
-    fields: [
-      { name: "name", label: "Legal Name", type: "text", placeholder: "John Doe" },
-      { name: "email", label: "Email Address", type: "email", placeholder: "john@example.com" },
-    ]
-  },
-  {
-    id: "socials",
-    title: "Your Presence",
-    subtitle: "Where can we find your content?",
-    fields: [
-      { name: "tiktok", label: "TikTok Handle", type: "text", placeholder: "@username" },
-      { name: "followers", label: "Current Follower Count", type: "text", placeholder: "e.g. 50k" },
-    ]
-  },
-  {
-    id: "goals",
-    title: "The Vision",
-    subtitle: "What are your 6-month goals?",
-    fields: [
-      { name: "goals", label: "Primary Goal", type: "textarea", placeholder: "Scale my revenue, reach Top 100, improve production..." },
-      { name: "discord", label: "Discord User ID (Optional)", type: "text", placeholder: "username#0000 or username" },
-    ]
-  }
+const CONTENT_TYPES = [
+  "Just Chatting / Casual Talk",
+  "Gaming / Gameplay",
+  "IRL (In Real Life) / Daily Life",
+  "Talent Shows / Singing, Dancing, Performances",
+  "Battles / PK / LIVE Matches",
+  "Educational / Tutorials / Advice",
+  "Q&A / Fan Interaction",
+  "Other (please specify below)"
 ];
 
+const RADIO_OPTIONS = ["Yes", "No"];
+const FREQUENCY_OPTIONS = ["0–2 times", "3–5 times", "6–10 times", "10+ times / Almost daily"];
+const LENGTH_OPTIONS = ["Under 1 hour", "1–2 hours", "2–4 hours", "4+ hours"];
+
 function ApplicationForm() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  const searchParams = useSearchParams();
+  const recruiterId = searchParams.get('recruiter');
+  const recruiter = recruiterId ? creators.find(c => c.id === recruiterId && c.tier === 'recruiter') : null;
+
+  const [formData, setFormData] = useState({
+    is18Plus: "",
+    isUSCA: "",
+    contentTypes: [] as string[],
+    otherContentType: "",
+    nicheDescription: "",
+    liveFrequency: "",
+    averageSessionLength: "",
+    tiktokHandle: "",
+    discordId: "",
+    emailAddress: "",
+    additionalNotes: ""
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (name: string, value: string) => {
+  const handleInputChange = (name: string, value: string | string[]) => {
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleNext = async () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      setIsSubmitting(true);
-      try {
-        const response = await fetch("/api/apply/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...formData,
-          }),
-        });
-
-        if (response.ok) {
-          setIsSubmitted(true);
-        } else {
-          const error = await response.json();
-          alert(error.error || "Failed to submit application. Please try again.");
-        }
-      } catch (error) {
-        console.error("Submission error:", error);
-        alert("An unexpected error occurred. Please check your connection.");
-      } finally {
-        setIsSubmitting(false);
-      }
+    // Clear error for this field if any
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
   };
 
-  const handleBack = () => {
-    if (currentStep > 0) setCurrentStep(currentStep - 1);
+  const handleContentTypeToggle = (type: string) => {
+    setFormData(prev => {
+      const isSelected = prev.contentTypes.includes(type);
+      let newTypes = [...prev.contentTypes];
+
+      if (isSelected) {
+        newTypes = newTypes.filter(t => t !== type);
+      } else {
+        if (newTypes.length < 3) {
+          newTypes.push(type);
+        }
+      }
+
+      // Clear error if we now have at least one selected
+      if (newTypes.length > 0 && errors.contentTypes) {
+        setErrors(e => { const newE = { ...e }; delete newE.contentTypes; return newE; });
+      }
+
+      return { ...prev, contentTypes: newTypes };
+    });
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.is18Plus) newErrors.is18Plus = "Required";
+    if (!formData.isUSCA) newErrors.isUSCA = "Required";
+
+    if (formData.contentTypes.length === 0) {
+      newErrors.contentTypes = "Please select at least one content type.";
+    }
+
+    if (formData.contentTypes.includes("Other (please specify below)") && !formData.otherContentType.trim()) {
+      newErrors.otherContentType = "Please specify your other content type.";
+    }
+
+    if (!formData.nicheDescription.trim()) newErrors.nicheDescription = "Required";
+    if (!formData.liveFrequency) newErrors.liveFrequency = "Required";
+    if (!formData.averageSessionLength) newErrors.averageSessionLength = "Required";
+    if (!formData.tiktokHandle.trim()) newErrors.tiktokHandle = "Required";
+
+    if (!formData.discordId.trim() && !formData.emailAddress.trim()) {
+      newErrors.contact = "Either Discord ID or Email Address must be provided.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      // Scroll to top or show error summary if needed
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/apply/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          recruiterId: recruiterId || undefined,
+        }),
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+      } else {
+        const error = await response.json();
+        alert(error.error || "Failed to submit application. Please try again.");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("An unexpected error occurred. Please check your connection.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
     return (
-      <main className="min-h-screen bg-background flex items-center justify-center p-6">
-        <motion.div 
+      <main className="min-h-screen bg-background flex items-center justify-center p-6 border-t border-border mt-[68px]">
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="glass-card max-w-lg w-full p-12 text-center rounded-[40px] border-primary/20"
@@ -93,7 +154,7 @@ function ApplicationForm() {
           </div>
           <h1 className="text-4xl font-black text-white mb-4 uppercase tracking-tighter">Application Received</h1>
           <p className="text-foreground-muted mb-12">
-            Our team will review your profile and reach out via email within 48 hours.
+            Your Recruiter will review your submission and get back to you soon. Stay consistent on LIVE and let's build something great together.
           </p>
           <Link href="/" className="block w-full py-4 bg-primary hover:bg-primary-dark text-white font-black rounded-2xl transition-all duration-300 uppercase tracking-widest shadow-lg shadow-primary/20">
             Back to Home
@@ -103,83 +164,277 @@ function ApplicationForm() {
     );
   }
 
-  const step = steps[currentStep];
-
   return (
-    <main className="min-h-screen bg-background pt-24 pb-12 overflow-hidden relative">
-      <Section>
-        <div className="max-w-xl mx-auto">
-          {/* Progress Bar */}
-          <div className="h-1 w-full bg-white/5 rounded-full mb-12 overflow-hidden">
-            <motion.div 
-              className="h-full bg-primary"
-              animate={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-            />
+    <main className="min-h-screen bg-background pt-24 pb-24 overflow-hidden relative border-t border-border mt-[68px]">
+      <div className="fixed inset-0 bg-dot-grid opacity-20 pointer-events-none mix-blend-screen" />
+      <div className="fixed inset-0 bg-gradient-to-b from-background via-background/90 to-background pointer-events-none" />
+
+      <Section className="relative z-10">
+        <div className="max-w-3xl mx-auto auto-rows-max glass-card p-8 md:p-12 rounded-[2rem] border border-white/10 shadow-2xl">
+
+          {recruiter && (
+            <div className="mb-10 flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
+              <img src={recruiter.image} alt={recruiter.name} className="w-16 h-16 rounded-full object-cover border-2 border-primary/30 shadow-neon-primary" />
+              <div>
+                <p className="text-[10px] font-bold text-primary tracking-widest uppercase mb-1">Applying To Team</p>
+                <p className="text-xl font-black text-white">{recruiter.name}</p>
+              </div>
+            </div>
+          )}
+
+          <div className="mb-10 text-center md:text-left">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-4 uppercase">
+              Creator <span className="text-gradient-primary">Intake Form</span>
+            </h1>
+            <p className="text-foreground-muted leading-relaxed">
+              Join Peace Time Agency and level up your TikTok LIVE experience! We're here to support your growth, battles, and experiences in a positive creator network. Please fill out the following questions honestly and completely.
+            </p>
           </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={step.id}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <p className="text-xs font-black text-primary tracking-[0.3em] uppercase mb-4">
-                Step {currentStep + 1} of {steps.length}
-              </p>
-              <h1 className="text-4xl md:text-5xl font-black text-white mb-2 uppercase tracking-tighter">
-                {step.title}
-              </h1>
-              <p className="text-foreground-muted mb-10">{step.subtitle}</p>
+          <form onSubmit={handleSubmit} className="space-y-10">
 
-
-
-              <div className="space-y-6">
-                {step.fields.map(field => (
-                  <div key={field.name} className="space-y-2">
-                    <label className="text-[10px] font-bold text-foreground-subtle uppercase tracking-widest ml-1">
-                      {field.label}
-                    </label>
-                    {field.type === "textarea" ? (
-                      <textarea 
-                        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] transition-all min-h-[120px]"
-                        placeholder={field.placeholder}
-                        value={formData[field.name] || ""}
-                        onChange={(e) => handleInputChange(field.name, e.target.value)}
-                      />
-                    ) : (
-                      <input 
-                        type={field.type}
-                        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] transition-all"
-                        placeholder={field.placeholder}
-                        value={formData[field.name] || ""}
-                        onChange={(e) => handleInputChange(field.name, e.target.value)}
-                      />
-                    )}
-                  </div>
+            {/* 1. 18 or older */}
+            <div className="space-y-3">
+              <label className="block text-sm font-bold text-white tracking-wide">
+                1. Are you 18 years or older? <span className="text-primary">*</span>
+              </label>
+              <div className="flex gap-4">
+                {RADIO_OPTIONS.map(opt => (
+                  <label key={opt} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="is18Plus"
+                      value={opt}
+                      checked={formData.is18Plus === opt}
+                      onChange={(e) => handleInputChange("is18Plus", e.target.value)}
+                      className="w-4 h-4 text-primary bg-white/5 border-white/20 focus:ring-primary focus:ring-2"
+                    />
+                    <span className="text-white/80">{opt}</span>
+                  </label>
                 ))}
               </div>
+              {errors.is18Plus && <p className="text-xs text-primary font-bold">{errors.is18Plus}</p>}
+              <p className="text-xs text-white/40 italic">Must be 18+ to join and participate in LIVE features.</p>
+            </div>
 
-              <div className="mt-12 flex gap-4">
-                {currentStep > 0 && (
-                  <button 
-                    onClick={handleBack}
-                    className="flex-1 py-4 glass-card border-white/10 hover:border-white/20 text-white font-bold rounded-2xl transition-all uppercase tracking-widest text-sm"
-                  >
-                    Back
-                  </button>
-                )}
-                <button 
-                  onClick={handleNext}
-                  disabled={isSubmitting}
-                  className="flex-[2] py-4 bg-primary hover:bg-primary-dark text-white font-black rounded-2xl transition-all uppercase tracking-widest text-sm shadow-xl shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? "Submitting..." : (currentStep === steps.length - 1 ? "Submit Application" : "Continue")}
-                </button>
+            {/* 2. US/Canada */}
+            <div className="space-y-3">
+              <label className="block text-sm font-bold text-white tracking-wide">
+                2. Are you located in the United States or Canada? <span className="text-primary">*</span>
+              </label>
+              <div className="flex gap-4">
+                {RADIO_OPTIONS.map(opt => (
+                  <label key={opt} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="isUSCA"
+                      value={opt}
+                      checked={formData.isUSCA === opt}
+                      onChange={(e) => handleInputChange("isUSCA", e.target.value)}
+                      className="w-4 h-4 text-primary bg-white/5 border-white/20 focus:ring-primary focus:ring-2"
+                    />
+                    <span className="text-white/80">{opt}</span>
+                  </label>
+                ))}
               </div>
-            </motion.div>
-          </AnimatePresence>
+              {errors.isUSCA && <p className="text-xs text-primary font-bold">{errors.isUSCA}</p>}
+              <p className="text-xs text-white/40 italic">Our primary support and features focus on US/CA creators at this time.</p>
+            </div>
+
+            {/* 3. Content Types */}
+            <div className="space-y-3">
+              <label className="block text-sm font-bold text-white tracking-wide">
+                3. What type of content do you make on TikTok LIVE? (Select up to 3) <span className="text-primary">*</span>
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {CONTENT_TYPES.map(type => (
+                  <label key={type} className="flex items-start gap-3 p-3 rounded-xl border border-white/10 bg-white/[0.02] cursor-pointer hover:bg-white/[0.05] transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={formData.contentTypes.includes(type)}
+                      onChange={() => handleContentTypeToggle(type)}
+                      disabled={!formData.contentTypes.includes(type) && formData.contentTypes.length >= 3}
+                      className="mt-1 w-4 h-4 rounded text-primary bg-white/5 border-white/20 focus:ring-primary focus:ring-2 disabled:opacity-50"
+                    />
+                    <span className="text-sm text-white/80 leading-snug">{type}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.contentTypes && <p className="text-xs text-primary font-bold">{errors.contentTypes}</p>}
+              <p className="text-xs text-white/40 italic">Choose the categories that best describe your LIVE style/content.</p>
+
+              {/* Conditional Other Textbox */}
+              <AnimatePresence>
+                {formData.contentTypes.includes("Other (please specify below)") && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="pt-2"
+                  >
+                    <input
+                      type="text"
+                      placeholder="Please describe your other content type"
+                      className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-primary/50 transition-all"
+                      value={formData.otherContentType}
+                      onChange={(e) => handleInputChange("otherContentType", e.target.value)}
+                    />
+                    {errors.otherContentType && <p className="text-xs text-primary font-bold mt-1">{errors.otherContentType}</p>}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* 4. Niche Description */}
+            <div className="space-y-3">
+              <label className="block text-sm font-bold text-white tracking-wide">
+                4. Please describe your niche/style (e.g. gaming format, IRL vibe, specific talent). <span className="text-primary">*</span>
+              </label>
+              <textarea
+                className="w-full min-h-[100px] bg-white/[0.03] border border-white/10 rounded-xl p-4 text-sm text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] transition-all"
+                placeholder="Tell us a little about your aesthetic and focus..."
+                value={formData.nicheDescription}
+                onChange={(e) => handleInputChange("nicheDescription", e.target.value)}
+              />
+              {errors.nicheDescription && <p className="text-xs text-primary font-bold">{errors.nicheDescription}</p>}
+              <p className="text-xs text-white/40 italic">This helps us understand your vibe and how we can best support you.</p>
+            </div>
+
+            {/* 5. Frequency */}
+            <div className="space-y-3">
+              <label className="block text-sm font-bold text-white tracking-wide">
+                5. How often do you plan to go LIVE per week? <span className="text-primary">*</span>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                {FREQUENCY_OPTIONS.map(opt => (
+                  <label key={opt} className="flex items-center gap-2 cursor-pointer p-3 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors">
+                    <input
+                      type="radio"
+                      name="liveFrequency"
+                      value={opt}
+                      checked={formData.liveFrequency === opt}
+                      onChange={(e) => handleInputChange("liveFrequency", e.target.value)}
+                      className="w-4 h-4 text-primary bg-white/5 border-white/20 focus:ring-primary focus:ring-2"
+                    />
+                    <span className="text-sm text-white/80">{opt}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.liveFrequency && <p className="text-xs text-primary font-bold">{errors.liveFrequency}</p>}
+              <p className="text-xs text-white/40 italic">Consistency helps us plan support and campaigns for you.</p>
+            </div>
+
+            {/* 6. Session Length */}
+            <div className="space-y-3">
+              <label className="block text-sm font-bold text-white tracking-wide">
+                6. What is your average LIVE session length? <span className="text-primary">*</span>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                {LENGTH_OPTIONS.map(opt => (
+                  <label key={opt} className="flex items-center gap-2 cursor-pointer p-3 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors">
+                    <input
+                      type="radio"
+                      name="averageSessionLength"
+                      value={opt}
+                      checked={formData.averageSessionLength === opt}
+                      onChange={(e) => handleInputChange("averageSessionLength", e.target.value)}
+                      className="w-4 h-4 text-primary bg-white/5 border-white/20 focus:ring-primary focus:ring-2"
+                    />
+                    <span className="text-sm text-white/80">{opt}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.averageSessionLength && <p className="text-xs text-primary font-bold">{errors.averageSessionLength}</p>}
+              <p className="text-xs text-white/40 italic">This helps us tailor tips and scheduling advice.</p>
+            </div>
+
+            {/* 7. TikTok Handle */}
+            <div className="space-y-3">
+              <label className="block text-sm font-bold text-white tracking-wide">
+                7. TikTok Username (@) <span className="text-primary">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="@yourusername"
+                className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] transition-all"
+                value={formData.tiktokHandle}
+                onChange={(e) => handleInputChange("tiktokHandle", e.target.value)}
+              />
+              {errors.tiktokHandle && <p className="text-xs text-primary font-bold">{errors.tiktokHandle}</p>}
+              <p className="text-xs text-white/40 italic">Please provide your current main TikTok handle so we can review your profile.</p>
+            </div>
+
+            {/* Contact Group */}
+            <div className="p-6 rounded-2xl bg-white/[0.01] border border-white/5 space-y-6">
+              <div className="mb-2">
+                <p className="text-sm font-bold text-white tracking-wide">Contact Information <span className="text-primary">*</span></p>
+                <p className="text-xs text-white/50 mb-4 mt-1">Please provide at least one form of communication so we can reach you.</p>
+                {errors.contact && (
+                  <div className="p-3 bg-primary/10 border border-primary/20 rounded-lg mb-4">
+                    <p className="text-sm text-primary font-bold">{errors.contact}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* 8. Discord ID */}
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-white/80 tracking-wide">
+                  8. Discord ID
+                </label>
+                <input
+                  type="text"
+                  placeholder="Username#1234 or @mention"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] transition-all"
+                  value={formData.discordId}
+                  onChange={(e) => handleInputChange("discordId", e.target.value)}
+                />
+                <p className="text-xs text-white/40 italic">Highly recommended! We use Discord for community chats, updates, training, and quick support.</p>
+              </div>
+
+              {/* 9. Email Address */}
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-white/80 tracking-wide">
+                  9. Email Address
+                </label>
+                <input
+                  type="email"
+                  placeholder="you@domain.com"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] transition-all"
+                  value={formData.emailAddress}
+                  onChange={(e) => handleInputChange("emailAddress", e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Additional Notes */}
+            <div className="space-y-3">
+              <label className="block text-sm font-bold text-white tracking-wide">
+                Additional Notes (Optional)
+              </label>
+              <textarea
+                className="w-full min-h-[80px] bg-white/[0.03] border border-white/10 rounded-xl p-4 text-sm text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] transition-all"
+                placeholder="Goals, past battle experience, or why you're interested..."
+                value={formData.additionalNotes}
+                onChange={(e) => handleInputChange("additionalNotes", e.target.value)}
+              />
+            </div>
+
+            <div className="pt-8">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-4 bg-primary hover:bg-primary-dark text-white font-black rounded-xl transition-all uppercase tracking-widest text-sm shadow-xl shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
+              >
+                <span className="relative z-10">{isSubmitting ? "Submitting..." : "Submit Application"}</span>
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              </button>
+              <p className="text-center text-xs text-white/30 mt-4">
+                Thank you for applying to Peace Time Agency! ☮️
+              </p>
+            </div>
+
+          </form>
+
         </div>
       </Section>
     </main>
@@ -188,6 +443,8 @@ function ApplicationForm() {
 
 export default function ApplicationPage() {
   return (
-    <ApplicationForm />
+    <Suspense fallback={<div className="min-h-screen bg-background pt-24 pb-12 flex items-center justify-center text-primary font-black uppercase tracking-widest text-sm mt-[68px]">Loading Form...</div>}>
+      <ApplicationForm />
+    </Suspense>
   );
 }

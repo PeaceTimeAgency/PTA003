@@ -443,7 +443,7 @@ export function Hero() {
           className="flex flex-col gap-4 sm:flex-row items-center justify-center pt-1 w-full"
         >
           {/* Primary CTA */}
-          <Link href="/api/auth/tiktok"
+          <Link href="/recruiters"
             className="group relative inline-flex items-center justify-center h-[52px] px-8 rounded-xl font-bold text-sm text-white overflow-hidden transition-all duration-300"
             style={{
               background: 'linear-gradient(135deg, #FF3C5F 0%, #E0244C 100%)',
@@ -495,8 +495,8 @@ export function Hero() {
             <div
               key={s.label}
               className={`group flex flex-col items-center justify-center py-7 px-4 cursor-default transition-all duration-300 hover:bg-white/[0.03] border-white/[0.06] ${i === 0 ? 'border-r border-b md:border-b-0' :
-                  i === 1 ? 'border-b md:border-b-0 md:border-r' :
-                    i === 2 ? 'border-r' : ''
+                i === 1 ? 'border-b md:border-b-0 md:border-r' :
+                  i === 2 ? 'border-r' : ''
                 }`}
             >
               <span

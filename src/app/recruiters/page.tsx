@@ -41,8 +41,7 @@ export default function RecruitersPage() {
                     </motion.p>
                 </div>
 
-                {/* Same styling as OurCreators but isolated to only 'recruiter' tier */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {recruiterCreators.map((creator, i) => (
                         <motion.div
                             key={creator.id}
@@ -50,37 +49,47 @@ export default function RecruitersPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
                         >
-                            <Link href={`/creators/${creator.id}`} className="block group relative h-full">
-                                <div className="relative overflow-hidden rounded-3xl glass-card transition-all duration-500 group-hover:scale-[1.02] h-full flex flex-col group-hover:shadow-neon-primary">
+                            <Link href={`/recruiters/${creator.id}`} className="block group relative h-full">
+                                <div className="relative overflow-hidden rounded-3xl glass-card transition-all duration-500 group-hover:scale-[1.02] h-full flex flex-col group-hover:shadow-neon-primary bg-white/[0.02] border border-white/10">
                                     {/* Image Container */}
-                                    <div className="aspect-[4/5] overflow-hidden relative">
+                                    <div className="aspect-[4/3] overflow-hidden relative">
                                         <img
                                             src={creator.image}
                                             alt={creator.name}
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-background via-black/20 to-transparent opacity-80" />
+                                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background to-transparent" />
                                     </div>
 
-                                    {/* Content Overlay */}
-                                    <div className="absolute inset-x-0 bottom-0 p-5 mt-auto bg-gradient-to-t from-black/80 to-transparent text-left">
-                                        <div className="flex items-center gap-2 mb-1.5">
+                                    {/* Content Area */}
+                                    <div className="p-6 flex-1 flex flex-col relative z-10 -mt-8">
+                                        <div className="flex items-center gap-2 mb-2">
                                             <span className="h-px w-4 bg-primary" />
-                                            <span className="text-[10px] font-bold text-primary tracking-widest uppercase truncate">{creator.category}</span>
+                                            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">{creator.category}</span>
                                         </div>
-                                        <h4 className="text-xl font-black text-white group-hover:text-primary transition-colors duration-300 truncate">
+                                        <h4 className="text-2xl font-black text-white group-hover:text-primary transition-colors duration-300">
                                             {creator.name}
                                         </h4>
-                                        <p className="text-xs text-white/50 font-mono mt-0.5 group-hover:text-white/80 transition-colors truncate">
+                                        <p className="text-xs text-white/50 font-mono mb-4">
                                             {creator.handle}
                                         </p>
 
-                                        <div className="mt-3 flex flex-wrap gap-1.5">
-                                            {creator.tags.slice(0, 2).map(tag => (
-                                                <span key={tag} className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/5 text-white/40 border border-white/10 uppercase tracking-tighter truncate max-w-full">
-                                                    {tag}
-                                                </span>
-                                            ))}
+                                        <p className="text-sm text-foreground-muted leading-relaxed line-clamp-3 mb-6 flex-1">
+                                            {creator.description}
+                                        </p>
+
+                                        <div className="mt-auto space-y-5">
+                                            <div className="flex flex-wrap gap-2">
+                                                {creator.tags.map(tag => (
+                                                    <span key={tag} className="text-[10px] font-bold px-2 py-1 rounded-md bg-white/5 text-white/60 border border-white/10 uppercase tracking-tighter">
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+
+                                            <div className="w-full py-3.5 text-center border border-primary/40 rounded-xl text-xs font-black text-primary uppercase tracking-widest group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                                                View Profile
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

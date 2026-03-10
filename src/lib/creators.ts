@@ -15,6 +15,7 @@ export interface Creator {
   stats: CreatorStats;
   tags: string[];
   tier?: 'staff' | 'top' | 'new' | 'recruiter';
+  webhookUrl?: string;
   socials: {
     tiktok: string;
     instagram?: string;
@@ -56,6 +57,7 @@ export const creators: Creator[] = [
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&h=500&auto=format&fit=crop",
     category: "Recruiter",
     tier: "recruiter",
+    webhookUrl: "https://discord.com/api/webhooks/1480833053831200799/QQ-0ruojboWj6Zac2ALdSqUDp2vaYSneoJikuiEZSfMD7fA4D8gDzGtzd9IIEJyL9hOW",
     stats: { followers: "5k", avgWatchTime: "10m", peakCCV: "100", totalLikes: "20k" },
     tags: ["Scouting", "Talent"],
     socials: { tiktok: "https://tiktok.com/@ptarecruiter" }

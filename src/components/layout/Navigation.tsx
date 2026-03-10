@@ -60,7 +60,7 @@ export function Navigation() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
 
-          <Link href="/api/auth/tiktok">
+          <Link href="/recruiters">
             <Button
               size="sm"
               className="hidden sm:inline-flex rounded-lg px-5 h-9 font-semibold text-sm bg-primary hover:bg-primary-dark text-foreground-inverse transition-all duration-200 hover:shadow-neon-primary"
@@ -107,7 +107,7 @@ export function Navigation() {
                 </Link>
               ))}
               <div className="pt-2 pb-1 border-t border-white/[0.06] mt-2">
-                <Link href="/api/auth/tiktok" onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/recruiters" onClick={() => setMobileMenuOpen(false)}>
                   <Button className="w-full rounded-lg h-10 font-semibold text-sm bg-primary hover:bg-primary-dark text-foreground-inverse transition-all duration-200">
                     Join the Roster
                   </Button>

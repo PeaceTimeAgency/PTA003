@@ -1,70 +1,110 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
-
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const AGENCY_EMAIL = process.env.AGENCY_EMAIL || "applications@peacetimeagency.com";
-
-const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
+import { creators } from "@/lib/creators";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, tiktok, followers, goals, discord, tiktokProfile } = body;
+    const {
+      recruiterId,
+      is18Plus,
+      isUSCA,
+      contentTypes,
+      otherContentType,
+      nicheDescription,
+      liveFrequency,
+      averageSessionLength,
+      tiktokHandle,
+      discordId,
+      emailAddress,
+      additionalNotes
+    } = body;
 
-    const discordDisplay = discord || "Not Provided";
-    const creatorName = name || tiktokProfile?.display_name || "Unknown Creator";
+    // Find the recruiter to get their webhook
+    const recruiter = creators.find(c => c.id === recruiterId && c.tier === 'recruiter');
 
-    const emailHtml = `
-      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-        <h2 style="color: #E11D48; border-bottom: 2px solid #E11D48; padding-bottom: 10px;">
-          🚀 New Talent Application
-        </h2>
-        <p>A new creator has applied to join <strong>Peace Time Agency</strong>.</p>
-        
-        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-          <h3 style="margin-top: 0; color: #555;">👤 Creator Information</h3>
-          <p><strong>Name:</strong> ${name || "N/A"}</p>
-          <p><strong>Email:</strong> ${email || "N/A"}</p>
-          <p><strong>Discord:</strong> ${discordDisplay}</p>
-        </div>
+    // We can fallback to a master webhook if needed, or if no recruiter is found. 
+    // Right now, if no recruiter, we just skip it or log it.
+    const webhookUrl = recruiter?.webhookUrl;
 
-        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-          <h3 style="margin-top: 0; color: #555;">📱 TikTok Presence</h3>
-          <p><strong>Handle:</strong> ${tiktok || "N/A"}</p>
-          <p><strong>Followers:</strong> ${followers || "N/A"}</p>
-          ${tiktokProfile ? `
-            <p><strong>Verified Name:</strong> ${tiktokProfile.display_name}</p>
-            <p><strong>Open ID:</strong> <code>${tiktokProfile.open_id}</code></p>
-          ` : ""}
-        </div>
-
-        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
-          <h3 style="margin-top: 0; color: #555;">🎯 The Vision (6-Month Goals)</h3>
-          <p style="white-space: pre-wrap;">${goals || "No goals provided."}</p>
-        </div>
-        
-        <p style="font-size: 12px; color: #999; text-align: center; margin-top: 30px;">
-          Peace Time Agency • Talent Intake System
-        </p>
-      </div>
-    `;
-
-    if (!resend) {
-      console.warn("RESEND_API_KEY is not set. Mocking email submission for development.");
-      console.log("Mock Email Submission HTML:\\n", emailHtml);
-      await new Promise(r => setTimeout(r, 1000));
-      return NextResponse.json({ success: true, message: "Mock submission successful" });
+    if (!webhookUrl) {
+      console.warn("No webhook URL found for recruiter.", recruiterId);
+      return NextResponse.json(
+        { error: "Submission endpoint configuration error. Please contact support." },
+        { status: 500 }
+      );
     }
 
-    const data = await resend.emails.send({
-      from: "Agency Inbox <onboarding@resend.dev>",
-      to: [AGENCY_EMAIL],
-      subject: `New Application: ${creatorName}`,
-      html: emailHtml,
+    const discordDisplay = discordId || "Not Provided";
+    const emailDisplay = emailAddress || "Not Provided";
+
+    // Format the selected content types
+    let contentTypesString = "None";
+    if (contentTypes && Array.isArray(contentTypes)) {
+      contentTypesString = contentTypes.join(", ");
+    }
+    if (otherContentType) {
+      contentTypesString += ` (Other: ${otherContentType})`;
+    }
+
+    // Prepare Discord Webhook Payload
+    const embed = {
+      title: "🚀 New Creator Intake Form Submitted!",
+      color: 0xE11D48, // Primary color hex
+      description: `A new creator has applied to join **Peace Time Agency** and selected **${recruiter.name}** as their recruiter.`,
+      fields: [
+        {
+          name: "👤 General",
+          value: `**TikTok Handle:** ${tiktokHandle}\n**18+:** ${is18Plus}\n**Location (US/CA):** ${isUSCA}`,
+          inline: false
+        },
+        {
+          name: "Contact Info",
+          value: `**Discord:** ${discordDisplay}\n**Email:** ${emailDisplay}`,
+          inline: false
+        },
+        {
+          name: "📱 Content Details",
+          value: `**Content Types:** ${contentTypesString}\n**Niche/Style:** ${nicheDescription}`,
+          inline: false
+        },
+        {
+          name: "🎥 LIVE Habits",
+          value: `**Frequency:** ${liveFrequency}\n**Avg Session Length:** ${averageSessionLength}`,
+          inline: false
+        }
+      ],
+      timestamp: new Date().toISOString(),
+      footer: {
+        text: "Peace Time Agency • Talent Intake System",
+      }
+    };
+
+    if (additionalNotes) {
+      embed.fields.push({
+        name: "📝 Additional Notes",
+        value: additionalNotes,
+        inline: false
+      });
+    }
+
+    const discordPayload = {
+      embeds: [embed]
+    };
+
+    // Send the POST request to the Discord Webhook
+    const discordResponse = await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(discordPayload),
     });
 
-    if (data.error) {
-       throw new Error(`Resend Error: ${data.error.message}`);
+    if (!discordResponse.ok) {
+      console.error("Discord Webhook Error:", discordResponse.status, discordResponse.statusText);
+      const errorText = await discordResponse.text();
+      console.error("Discord Response details:", errorText);
+      throw new Error(`Discord Webhook failed with status ${discordResponse.status}`);
     }
 
     return NextResponse.json({ success: true });
