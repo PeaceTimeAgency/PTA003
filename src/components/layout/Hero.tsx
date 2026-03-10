@@ -349,18 +349,7 @@ export function Hero() {
 
       {/* ── UE5 Corner HUD removed ──────────────────────── */}
 
-      {/* ── UE5 Corner HUD: Bottom Left ───────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.0, delay: 1.5 }}
-        className="absolute bottom-[5%] left-6 z-20 pointer-events-none"
-        aria-hidden="true"
-      >
-        <div className="font-mono text-[9px] text-white/20 tracking-[0.1em] uppercase">
-          PEACETIMEAGENCY.IO · BLACK LABEL
-        </div>
-      </motion.div>
+
 
       {/* ── Cinematic Scan Lines ────────────────────────────────── */}
       <motion.div

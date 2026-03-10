@@ -38,9 +38,9 @@ const CreatorGrid = ({ title, desc, list, isLiveSection = false, isUserSection =
                       <span className="text-[10px] font-black text-white tracking-widest uppercase">You</span>
                     </div>
                   )}
-                  <img 
-                    src={creator.image} 
-                    alt={creator.name} 
+                  <img
+                    src={creator.image}
+                    alt={creator.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 blur-sm group-hover:blur-none"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-black/20 to-transparent opacity-80" />
@@ -58,7 +58,7 @@ const CreatorGrid = ({ title, desc, list, isLiveSection = false, isUserSection =
                   <p className="text-xs text-white/50 font-mono mt-0.5 group-hover:text-white/80 transition-colors truncate">
                     {creator.handle}
                   </p>
-                  
+
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {creator.tags.slice(0, 2).map(tag => (
                       <span key={tag} className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/5 text-white/40 border border-white/10 uppercase tracking-tighter truncate max-w-full">
@@ -78,12 +78,12 @@ const CreatorGrid = ({ title, desc, list, isLiveSection = false, isUserSection =
                   </div>
                   {creator.stats.totalLikes && creator.stats.totalLikes !== "0" && (
                     <div className="mt-2">
-                       <div className="text-sm font-black text-white drop-shadow-md">
-                         {creator.stats.totalLikes}
-                       </div>
-                       <div className="text-[9px] font-bold text-white/40 uppercase tracking-widest leading-tight">
-                         Likes
-                       </div>
+                      <div className="text-sm font-black text-white drop-shadow-md">
+                        {creator.stats.totalLikes}
+                      </div>
+                      <div className="text-[9px] font-bold text-white/40 uppercase tracking-widest leading-tight">
+                        Likes
+                      </div>
                     </div>
                   )}
                 </div>
@@ -113,16 +113,17 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
 
 
   const staffCreators = creators.filter(c => c.tier === 'staff');
+  const recruiterCreators = creators.filter(c => c.tier === 'recruiter');
   const topCreators = creators.filter(c => c.tier === 'top').slice(0, 5);
   const newCreators = creators.filter(c => c.tier === 'new').slice(0, 5);
-  
-  const displayCreators = isMainPage ? [...staffCreators, ...topCreators, ...newCreators] : creators;
+
+  const displayCreators = isMainPage ? [...staffCreators, ...recruiterCreators, ...topCreators, ...newCreators] : creators;
 
   const liveHandles = liveCreators.map(lc => lc.username.toLowerCase());
   const liveRoster = displayCreators.filter(c => liveHandles.includes(c.handle.toLowerCase()));
-  
+
   // Extract all unique tags
-  const allTags = isMainPage 
+  const allTags = isMainPage
     ? Array.from(new Set(displayCreators.map(c => c.category))).sort()
     : Array.from(new Set(creators.flatMap(c => c.tags))).sort();
 
@@ -144,7 +145,7 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
       <div className="relative z-10 w-full max-w-7xl mx-auto">
         {isMainPage && (
           <div className="absolute top-0 left-4 md:left-8 z-50">
-            <Link 
+            <Link
               href="/creators"
               className="group flex flex-col sm:flex-row items-center sm:items-start gap-1 sm:gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all duration-300 text-xs sm:text-sm font-bold text-white/80 hover:text-white backdrop-blur-md"
             >
@@ -178,7 +179,7 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
             transition={{ delay: 0.2 }}
             className="text-foreground-muted text-lg max-w-2xl mx-auto leading-relaxed"
           >
-            The Peace Time roster is home to the most dedicated, high-growth creators on TikTok LIVE. 
+            The Peace Time roster is home to the most dedicated, high-growth creators on TikTok LIVE.
             We provide the infrastructure; they provide the talent.
           </motion.p>
         </div>
@@ -186,12 +187,12 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
         <div className="px-4 md:px-8 lg:px-12">
 
           {liveRoster.length > 0 && (
-             <CreatorGrid 
-               title="Live Now" 
-               desc="Roster members currently broadcasting." 
-               list={liveRoster} 
-               isLiveSection={true}
-             />
+            <CreatorGrid
+              title="Live Now"
+              desc="Roster members currently broadcasting."
+              list={liveRoster}
+              isLiveSection={true}
+            />
           )}
 
           {/* Tag Filter System */}
@@ -200,11 +201,10 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
             <div className="flex flex-wrap justify-center gap-2 max-w-4xl">
               <button
                 onClick={() => setSelectedTag(null)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 border ${
-                  selectedTag === null
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 border ${selectedTag === null
                     ? "bg-primary text-white border-primary shadow-neon-primary"
                     : "bg-white/5 text-white/60 border-white/10 hover:bg-white/10 hover:text-white"
-                }`}
+                  }`}
               >
                 All Creators
               </button>
@@ -212,11 +212,10 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
                 <button
                   key={tag}
                   onClick={() => setSelectedTag(tag)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 border ${
-                    selectedTag === tag
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 border ${selectedTag === tag
                       ? "bg-primary text-white border-primary shadow-neon-primary"
                       : "bg-white/5 text-white/60 border-white/10 hover:bg-white/10 hover:text-white"
-                  }`}
+                    }`}
                 >
                   {tag}
                 </button>
@@ -231,35 +230,40 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
             transition={{ duration: 0.5 }}
           >
             {selectedTag ? (
-              <CreatorGrid 
-                title={`${selectedTag} Creators`} 
-                desc={`Showing creators specialized in ${selectedTag}.`} 
-                list={filteredCreators} 
+              <CreatorGrid
+                title={`${selectedTag} Creators`}
+                desc={`Showing creators specialized in ${selectedTag}.`}
+                list={filteredCreators}
               />
             ) : (
               <div className="flex flex-col">
-                <CreatorGrid 
-                  title="Agency Staff" 
-                  desc="The leadership driving Peace Time Agency." 
-                  list={filteredCreators.filter(c => c.tier === 'staff')} 
+                <CreatorGrid
+                  title="Staff Category"
+                  desc="The leadership driving Peace Time Agency."
+                  list={filteredCreators.filter(c => c.tier === 'staff')}
+                />
+                <CreatorGrid
+                  title="Recruiter Category"
+                  desc="Talent acquisition and scouting."
+                  list={filteredCreators.filter(c => c.tier === 'recruiter')}
                 />
                 {!isMainPage ? (
-                  <CreatorGrid 
-                    title="Agency Creators" 
-                    desc="The talent of Peace Time Agency." 
-                    list={filteredCreators.filter(c => c.tier !== 'staff')} 
+                  <CreatorGrid
+                    title="Creators Category"
+                    desc="The talent of Peace Time Agency."
+                    list={filteredCreators.filter(c => c.tier !== 'staff' && c.tier !== 'recruiter')}
                   />
                 ) : (
                   <>
-                    <CreatorGrid 
-                      title="Top 5 Performing" 
-                      desc="Our highest performing creators." 
-                      list={filteredCreators.filter(c => c.tier === 'top').slice(0, 5)} 
+                    <CreatorGrid
+                      title="Top 5 Performing"
+                      desc="Our highest performing creators."
+                      list={filteredCreators.filter(c => c.tier === 'top').slice(0, 5)}
                     />
-                    <CreatorGrid 
-                      title="5 Newest Accepted" 
-                      desc="The latest additions to our roster." 
-                      list={filteredCreators.filter(c => c.tier === 'new').slice(0, 5)} 
+                    <CreatorGrid
+                      title="5 Newest Accepted"
+                      desc="The latest additions to our roster."
+                      list={filteredCreators.filter(c => c.tier === 'new').slice(0, 5)}
                     />
                   </>
                 )}

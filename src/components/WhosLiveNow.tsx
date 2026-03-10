@@ -33,7 +33,7 @@ export default function WhosLiveNow() {
   }, []);
 
   return (
-    <div id="creators" className="w-full overflow-hidden py-20 relative bg-background-surface">
+    <div id="creators" className="w-full overflow-hidden py-12 relative bg-background-surface">
       {/* Top/bottom edge fades */}
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
@@ -41,9 +41,8 @@ export default function WhosLiveNow() {
       {/* Header */}
       <div className="container mx-auto px-4 mb-10 flex justify-between items-end relative z-10">
         <div>
-          <p className="text-xs font-semibold text-primary tracking-[0.2em] uppercase mb-2">PTA Roster</p>
-          <h2 className="text-3xl font-black tracking-tight text-foreground">Live Right Now</h2>
-          <p className="text-foreground-muted mt-1.5 text-sm">Elite creators currently broadcasting.</p>
+          <p className="text-xs font-semibold text-primary tracking-[0.2em] uppercase mb-2">Live Now</p>
+          <h2 className="text-3xl font-black tracking-tight text-foreground">Elite Creators Broadcasting</h2>
         </div>
         <Link href="/creators" className="hidden sm:flex items-center gap-1.5 text-sm text-foreground-muted hover:text-foreground transition-colors group font-medium">
           View All
@@ -73,7 +72,7 @@ export default function WhosLiveNow() {
               >
                 {/* Hover glow border */}
                 <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-primary/40 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[2px]" />
-                
+
                 <div className="relative glass-card rounded-2xl p-4 transition-transform duration-300 group-hover:-translate-y-1.5">
                   {/* Top accent line on hover */}
                   <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />

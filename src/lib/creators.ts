@@ -14,7 +14,7 @@ export interface Creator {
   category: string;
   stats: CreatorStats;
   tags: string[];
-  tier?: 'staff' | 'top' | 'new';
+  tier?: 'staff' | 'top' | 'new' | 'recruiter';
   socials: {
     tiktok: string;
     instagram?: string;
@@ -30,7 +30,7 @@ export const creators: Creator[] = [
     handle: "@ptafounder",
     description: "Founder & Talent Director. Ensuring creators get maximum ROI on their streams.",
     image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&h=500&auto=format&fit=crop",
-    category: "Agency",
+    category: "Staff",
     tier: "staff",
     stats: { followers: "15k", avgWatchTime: "15m", peakCCV: "500", totalLikes: "100k" },
     tags: ["Leadership", "Strategy"],
@@ -42,11 +42,23 @@ export const creators: Creator[] = [
     handle: "@ptamarcus",
     description: "Lead Technical Producer. Handling stream architectures and OBS routing.",
     image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&h=500&auto=format&fit=crop",
-    category: "Agency",
+    category: "Staff",
     tier: "staff",
     stats: { followers: "12k", avgWatchTime: "25m", peakCCV: "800", totalLikes: "85k" },
     tags: ["Technical", "OBS Expert"],
     socials: { tiktok: "https://tiktok.com/@ptamarcus" }
+  },
+  {
+    id: "staff-recruiter",
+    name: "Elena Rostova",
+    handle: "@ptarecruiter",
+    description: "Lead Recruiter. Finding the next generation of top talent.",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&h=500&auto=format&fit=crop",
+    category: "Recruiter",
+    tier: "recruiter",
+    stats: { followers: "5k", avgWatchTime: "10m", peakCCV: "100", totalLikes: "20k" },
+    tags: ["Scouting", "Talent"],
+    socials: { tiktok: "https://tiktok.com/@ptarecruiter" }
   },
 
   // TOP 5 PERFORMING

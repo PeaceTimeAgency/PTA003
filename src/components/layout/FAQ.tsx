@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Section } from "@/components/layout/Section";
 import Link from "next/link";
+import PreInterview from "@/components/PreInterview";
 
 const faqs = [
   {
@@ -57,24 +58,74 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 export function FAQ() {
   return (
     <Section id="faq" className="bg-background-surface">
-      <div className="mx-auto max-w-2xl">
-        <div className="text-center mb-12">
-          <p className="text-xs font-semibold text-primary tracking-[0.2em] uppercase mb-3">Got Questions</p>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
-            Frequently <span className="text-gradient-primary">Asked</span>
-          </h2>
+      <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-start">
+        <div className="w-full">
+          <div className="text-left mb-10">
+            <p className="text-xs font-semibold text-primary tracking-[0.2em] uppercase mb-3">Got Questions</p>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
+              Frequently <span className="text-gradient-primary">Asked</span>
+            </h2>
+          </div>
+
+          <div className="glass-card rounded-2xl px-6">
+            {faqs.map((faq, i) => (
+              <FAQItem key={i} q={faq.q} a={faq.a} />
+            ))}
+          </div>
         </div>
 
-        <div className="glass-card rounded-2xl px-6">
-          {faqs.map((faq, i) => (
-            <FAQItem key={i} q={faq.q} a={faq.a} />
-          ))}
+        <div className="w-full min-h-[500px]">
+          <PreInterview />
         </div>
       </div>
 
       {/* Final CTA Banner */}
-      <div className="mt-24 relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A0B12] via-[#1F0D18] to-[#0F0B1A] border border-primary/20 p-12 text-center">
-        <div className="absolute inset-0 bg-dot-grid opacity-40 pointer-events-none" />
+      <div className="mt-24 relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A0B12] via-[#1F0D18] to-[#0F0B1A] border border-primary/20 p-12 text-center group">
+        <style dangerouslySetInnerHTML={{
+          __html: `
+          @keyframes meteor {
+            0% { transform: rotate(215deg) translateX(0); opacity: 1; }
+            70% { opacity: 1; }
+            100% { transform: rotate(215deg) translateX(-1000px); opacity: 0; }
+          }
+          .meteor-tail {
+            position: absolute;
+            transform: rotate(215deg);
+            width: 150px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,60,95,0) 0%, rgba(255,60,95,0.8) 100%);
+            animation: meteor 4s linear infinite;
+            opacity: 0;
+            z-index: 1;
+          }
+          .meteor-tail::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 10px 2px rgba(255,60,95,0.6);
+          }
+        ` }} />
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="meteor-tail"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${20 + Math.random() * 130}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${2 + Math.random() * 4}s`
+              }}
+            />
+          ))}
+        </div>
+        <div className="absolute inset-0 bg-dot-grid opacity-40 pointer-events-none z-0" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-primary/15 blur-[80px] pointer-events-none" />
         <div className="relative z-10">
           <p className="text-xs font-semibold text-primary tracking-[0.2em] uppercase mb-4">Ready?</p>
