@@ -37,18 +37,14 @@ export function Navigation() {
 
         {/* Logo */}
         {!isCardForm ? (
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+          <Link href="/" className="flex items-center group">
+            <div className="w-10 h-10 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
               <img 
-                src="/branding/34634563456.png" 
+                src="/branding/peace_logo.png" 
                 alt="Peace Time Agency Logo" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
-            <span className="text-base font-bold tracking-tight">
-              <span className="text-foreground">Peace Time</span>
-              <span className="text-primary"> Agency</span>
-            </span>
           </Link>
         ) : (
           <div className="flex-1" /> // Spacer for balanced centering if needed, but justify-between will handle it
