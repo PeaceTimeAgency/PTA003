@@ -99,8 +99,8 @@ export default function RecruitersPage() {
                 </div>
 
                 {recruiterCreators.length === 0 && (
-                    <div className="w-full text-center text-foreground/50 py-24 border border-dashed border-foreground/10 rounded-2xl glass-card">
-                        No recruiters currently available to display.
+                    <div className="w-full text-center py-24 border border-dashed border-foreground/10 rounded-2xl glass-card">
+                        <p className="text-2xl font-black text-primary uppercase tracking-[0.2em]">Coming Soon!</p>
                     </div>
                 )}
             </Section>

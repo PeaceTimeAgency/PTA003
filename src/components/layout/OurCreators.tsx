@@ -186,7 +186,7 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-7xl font-black tracking-tight text-foreground mb-6 [text-shadow:0_0_1.5px_rgba(0,0,0,0.8)]"
           >
-            Our <span className="text-gradient-primary">Creators.</span>
+            Our <span className="text-primary">Creators.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
