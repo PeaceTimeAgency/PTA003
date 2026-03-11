@@ -17,10 +17,10 @@
     --color-secondary-base: #A78BFA;
     --color-secondary-dark-base: #7C5FC4;
 
-    --color-foreground-base: #F0F4FC;
-    --color-foreground-muted-base: #7A8BA8;
-    --color-foreground-subtle-base: #3E4F69;
-    --color-foreground-inverse-base: #080C14;
+    --color-foreground-base: #FFFFFF;
+    --color-foreground-muted-base: #94A3B8;
+    --color-foreground-subtle-base: #64748B;
+    --color-foreground-inverse-base: #000000;
   }
 
   /* Light Theme Override */
@@ -39,7 +39,7 @@
     --color-secondary-base: #8B5CF6; /* Deeper violet for day */
     --color-secondary-dark-base: #6D28D9;
 
-    --color-foreground-base: #0F172A;
+    --color-foreground-base: #000000;
     --color-foreground-muted-base: #475569;
     --color-foreground-subtle-base: #64748B;
     --color-foreground-inverse-base: #FFFFFF;
