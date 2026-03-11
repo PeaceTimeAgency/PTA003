@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Section } from "@/components/layout/Section";
-import { Twitter, Instagram, ArrowLeft, Users, Heart } from "lucide-react";
+import { Twitter, Instagram, ArrowLeft, Users, Heart, Youtube, Twitch, Globe, Gamepad2, MessageSquare } from "lucide-react";
 
 interface CreatorPageProps {
   params: Promise<{ id: string }>;
@@ -135,6 +135,31 @@ export default async function CreatorPage({ params }: CreatorPageProps) {
             {creator.socials.twitter && (
               <a href={creator.socials.twitter} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-blue-500/20 hover:border-blue-500/50 hover:text-blue-400 transition-all text-white/60">
                 <Twitter className="w-5 h-5" />
+              </a>
+            )}
+            {creator.socials.youtube && (
+              <a href={creator.socials.youtube} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-400 transition-all text-white/60">
+                <Youtube className="w-5 h-5" />
+              </a>
+            )}
+            {creator.socials.twitch && (
+              <a href={creator.socials.twitch} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-purple-500/20 hover:border-purple-500/50 hover:text-purple-400 transition-all text-white/60">
+                <Twitch className="w-5 h-5" />
+              </a>
+            )}
+            {creator.socials.discord && (
+              <a href={creator.socials.discord} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-indigo-500/20 hover:border-indigo-500/50 hover:text-indigo-400 transition-all text-white/60">
+                <MessageSquare className="w-5 h-5" />
+              </a>
+            )}
+            {creator.socials.steam && (
+              <a href={creator.socials.steam} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-slate-500/20 hover:border-slate-500/50 hover:text-slate-400 transition-all text-white/60">
+                <Gamepad2 className="w-5 h-5" />
+              </a>
+            )}
+            {creator.socials.website && (
+              <a href={creator.socials.website} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-emerald-500/20 hover:border-emerald-500/50 hover:text-emerald-400 transition-all text-white/60">
+                <Globe className="w-5 h-5" />
               </a>
             )}
           </div>

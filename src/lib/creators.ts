@@ -21,6 +21,11 @@ export interface Creator {
     tiktok: string;
     instagram?: string;
     twitter?: string;
+    youtube?: string;
+    discord?: string;
+    twitch?: string;
+    steam?: string;
+    website?: string;
   };
 }
 
@@ -43,6 +48,31 @@ export const creators: Creator[] = [
     liveUrl: "https://www.tiktok.com/@baked.laze/live",
     socials: {
       tiktok: "https://www.tiktok.com/@baked.laze"
+    }
+  },
+  {
+    id: "oopsitsjrpgtime",
+    name: "OopsItsJRPGTime",
+    handle: "@oopsitsjrpgtime",
+    description: "Hello there my name is OopsItsJRPGTime or \"Oops\" for short! If I were to have to describe myself as a vibe it would have to be \"Chill.\" I stream mostly JRPG Games from classic to new and anywhere in between! I first fell in love with Jrpg games back on the SNES with my very first game ever Breath of Fire and from then on I was hooked! My goal for streaming has always been to make amazing friends, so will you be my friend?!",
+    image: "/creators/oopsitsjrpgtime.jpg",
+    category: "Gaming",
+    stats: {
+      followers: "New",
+      avgWatchTime: "N/A",
+      peakCCV: "N/A",
+      totalLikes: "0"
+    },
+    tags: ["Gaming", "JRPGs", "Classic"],
+    tier: "new",
+    liveUrl: "https://www.tiktok.com/@oopsitsjrpgtime/live",
+    socials: {
+      tiktok: "https://www.tiktok.com/@oopsitsjrpgtime",
+      twitch: "https://www.twitch.tv/oopsitsjrpgtime",
+      youtube: "https://www.youtube.com/@OopsItsJRPGTIME",
+      discord: "https://discordapp.com/users/oopsitsjrpgtime",
+      steam: "https://steamcommunity.com/id/OopsItsJRPGTIME",
+      website: "https://www.oopsitsjrpgtime.com/"
     }
   }
 ];
