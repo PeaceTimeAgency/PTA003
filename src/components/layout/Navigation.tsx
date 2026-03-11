@@ -29,7 +29,7 @@ export function Navigation() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-        ? "glass border-b border-foreground/[0.06] shadow-[0_1px_24px_rgba(0,0,0,0.4)]"
+        ? "bg-[#01020A]/80 backdrop-blur-md border-b border-white/[0.06] shadow-[0_1px_24px_rgba(0,0,0,0.4)]"
         : "bg-transparent border-b border-transparent"
         }`}
     >
@@ -39,7 +39,7 @@ export function Navigation() {
         {!isCardForm ? (
           <Link href="/" className="flex items-center group">
             <span className="text-xl font-bold tracking-tighter [text-shadow:0_0_1px_rgba(0,0,0,0.8)]">
-              <span className="text-foreground">Peace Time</span>
+              <span className="text-white">Peace Time</span>
               <span className="text-primary"> Agency</span>
             </span>
           </Link>
@@ -54,7 +54,7 @@ export function Navigation() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-foreground-muted hover:text-foreground rounded-lg hover:bg-foreground/[0.04] transition-all duration-200 [text-shadow:0_0_1px_rgba(0,0,0,0.4)]"
+                className="px-4 py-2 text-sm font-medium text-white/70 hover:text-white rounded-lg hover:bg-white/[0.04] transition-all duration-200 [text-shadow:0_0_1px_rgba(0,0,0,0.4)]"
               >
                 {link.name}
               </Link>
@@ -79,7 +79,7 @@ export function Navigation() {
 
               {/* Mobile Menu */}
               <button
-                className="md:hidden p-2 text-foreground-muted hover:text-foreground transition-colors rounded-lg hover:bg-foreground/[0.04]"
+                className="md:hidden p-2 text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? (
@@ -103,7 +103,7 @@ export function Navigation() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="md:hidden overflow-hidden bg-background-surface/95 backdrop-blur-xl border-b border-foreground/[0.06]"
+            className="md:hidden overflow-hidden bg-[#0F1623]/95 backdrop-blur-xl border-b border-white/[0.06]"
           >
             <nav className="flex flex-col px-4 py-4 gap-2">
               {NAV_LINKS.map((link) => (
@@ -111,12 +111,12 @@ export function Navigation() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 text-sm font-medium text-foreground-muted hover:text-foreground rounded-lg hover:bg-foreground/[0.04] transition-all duration-200"
+                  className="px-4 py-3 text-sm font-medium text-white/70 hover:text-white rounded-lg hover:bg-white/[0.04] transition-all duration-200"
                 >
                   {link.name}
                 </Link>
               ))}
-              <div className="pt-2 pb-1 border-t border-foreground/[0.06] mt-2">
+              <div className="pt-2 pb-1 border-t border-white/[0.06] mt-2">
                 <Link href="/recruiters" onClick={() => setMobileMenuOpen(false)}>
                   <Button className="w-full rounded-lg h-10 font-semibold text-sm bg-primary hover:bg-primary-dark text-foreground-inverse transition-all duration-200">
                     Join the Roster
