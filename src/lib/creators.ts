@@ -23,4 +23,24 @@ export interface Creator {
   };
 }
 
-export const creators: Creator[] = [];
+export const creators: Creator[] = [
+  {
+    id: "baked",
+    name: "Baked",
+    handle: "@baked.laze",
+    description: "Hi, I’m Nick, founder of Peace Time Agency. I work directly with creators to help them grow on TikTok LIVE through stream strategy, setup guidance, and community support. My goal is simple, help creators stay consistent, improve their content, and turn streaming into real opportunity.",
+    image: "/creators/baked.jpg",
+    category: "Gaming / Staff",
+    stats: {
+      followers: "N/A",
+      avgWatchTime: "N/A",
+      peakCCV: "N/A",
+      totalLikes: "0"
+    },
+    tags: ["Staff", "Gaming"],
+    tier: "staff",
+    socials: {
+      tiktok: "https://www.tiktok.com/@baked.laze"
+    }
+  }
+];

@@ -53,7 +53,9 @@ const CreatorGrid = ({ title, desc, list, isLiveSection = false, isUserSection =
                 <div className="absolute inset-x-0 bottom-0 p-5 mt-auto bg-gradient-to-t from-black/80 to-transparent text-left">
                   <div className="flex items-center gap-2 mb-1.5">
                     <span className="h-px w-4 bg-primary" />
-                    <span className="text-[10px] font-bold text-primary tracking-widest uppercase truncate">{creator.category}</span>
+                    <span className="text-[10px] font-bold text-primary tracking-widest uppercase truncate">
+                      {creator.category.replace(/\s+and\s+/gi, ' / ')}
+                    </span>
                   </div>
                   <h4 className="text-xl font-black text-foreground group-hover:text-primary transition-colors duration-300 truncate [text-shadow:0_0_1.5px_rgba(0,0,0,0.8)]">
                     {creator.name}

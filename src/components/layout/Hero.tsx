@@ -404,15 +404,15 @@ export function Hero() {
           custom={1} initial="hidden" animate="show" variants={fadeUp}
           className="text-5xl font-black tracking-tighter sm:text-6xl md:text-7xl lg:text-[88px] leading-[0.93] text-white"
         >
-            <span
-              style={{
-                background: 'linear-gradient(180deg, #FFFFFF 0%, rgba(210,225,255,0.82) 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                textShadow: '0 0 1px rgba(0,0,0,0.8)',
-              }}
-            >
+          <span
+            style={{
+              color: '#FFFFFF',
+              background: 'linear-gradient(180deg, #FFFFFF 0%, rgba(210,225,255,0.82) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
             The Creator Agency
           </span>
           <br />
@@ -503,17 +503,17 @@ export function Hero() {
               <span
                 className="text-2xl md:text-3xl font-black transition-all duration-300 text-white"
                 style={{
+                  color: '#FFFFFF',
                   background: 'linear-gradient(135deg, #FFFFFF 30%, rgba(167,139,250,0.8) 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
                   filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.15))',
-                  textShadow: '0 0 1px rgba(0,0,0,0.8)',
                 }}
               >
                 {s.value}
               </span>
-              <span className="text-[10px] mt-1.5 font-semibold text-white/30 uppercase tracking-[0.18em] group-hover:text-white/50 transition-colors">
+              <span className="text-[10px] mt-1.5 font-semibold text-white/50 uppercase tracking-[0.18em] group-hover:text-white/70 transition-colors">
                 {s.label}
               </span>
             </div>
