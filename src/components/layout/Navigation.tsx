@@ -54,7 +54,7 @@ export function Navigation() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-white/70 hover:text-white rounded-lg hover:bg-white/[0.04] transition-all duration-200 [text-shadow:0_0_1px_rgba(0,0,0,0.4)]"
+                className="px-4 py-2 text-sm font-semibold text-white hover:text-white rounded-lg hover:bg-white/[0.06] transition-all duration-200 [text-shadow:0_0_8px_rgba(255,255,255,0.1)]"
               >
                 {link.name}
               </Link>
@@ -111,7 +111,7 @@ export function Navigation() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 text-sm font-medium text-white/70 hover:text-white rounded-lg hover:bg-white/[0.04] transition-all duration-200"
+                  className="px-4 py-3 text-sm font-semibold text-white hover:bg-white/[0.06] rounded-lg transition-all duration-200"
                 >
                   {link.name}
                 </Link>
