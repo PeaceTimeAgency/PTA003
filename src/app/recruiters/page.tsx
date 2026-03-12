@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { creators } from "@/lib/creators";
 import { Section } from "@/components/layout/Section";
+import { CreatorMediaBox } from "@/components/ui/CreatorMediaBox";
 
 export default function RecruitersPage() {
     const recruiterCreators = creators.filter(c => c.tier === 'recruiter');
@@ -53,10 +54,10 @@ export default function RecruitersPage() {
                                 <div className="relative overflow-hidden rounded-3xl glass-card transition-all duration-500 group-hover:scale-[1.02] h-full flex flex-col group-hover:shadow-neon-primary bg-foreground/[0.02] border border-foreground/10">
                                     {/* Image Container */}
                                     <div className="aspect-[4/3] overflow-hidden relative">
-                                        <img
-                                            src={creator.image}
-                                            alt={creator.name}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        <CreatorMediaBox
+                                            images={creator.images && creator.images.length > 0 ? creator.images : [creator.image]}
+                                            name={creator.name}
+                                            imageClassName="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
                                         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background to-transparent" />
                                     </div>

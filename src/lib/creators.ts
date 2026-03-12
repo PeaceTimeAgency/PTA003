@@ -104,6 +104,74 @@ export const creators: Creator[] = [
       tiktok: "https://www.tiktok.com/@mrleftythehand",
       twitch: "https://www.twitch.tv/mrleftythehand"
     }
+  },
+  {
+    id: "trashsoupgaming",
+    name: "Trash (aka Lindsey)",
+    handle: "@trashsoupgaming",
+    description: "Lindsey, also known as Trash (@TrashSoupGaming), is a full-time TikTok streamer who focuses on story-driven games like RPGs and well-written horror. Over time, she has built a strong, loyal community that doesn’t just show up for the games, but for the conversations, reactions, and shared experiences that happen during every stream. Lindsey believes that growth on TikTok LIVE isn’t just about numbers. It’s about building a space where people want to come back, where viewers feel part of something, and where creators can develop confidence in what they’re doing. For Lindsey, streaming isn’t just about going live. It’s about helping others find their place and grow along the way.",
+    image: "/creators/trashsoupgaming.png",
+    category: "Staff / Gaming / Just Chatting",
+    stats: {
+      followers: "Full-time",
+      avgWatchTime: "N/A",
+      peakCCV: "N/A",
+      totalLikes: "0"
+    },
+    tags: ["Staff", "Gaming", "RPG", "Horror", "Just Chatting"],
+    tier: "staff",
+    liveUrl: "https://www.tiktok.com/@trashsoupgaming/live",
+    socials: {
+      tiktok: "https://www.tiktok.com/@trashsoupgaming",
+      youtube: "https://www.youtube.com/@trashsoupgaming",
+      website: "https://trashsoup.live/"
+    }
+  },
+  {
+    id: "papaj",
+    name: "Papa J",
+    handle: "@papa.j547",
+    description: "Just a gamer from Wyoming. I've been gaming since the Atari 2600 lol. Mostly I stream War Thunder but will occasionally change it up with something different.",
+    image: "/branding/KYRAX425.png",
+    category: "Gaming / Just Chatting / IRL",
+    stats: {
+      followers: "New",
+      avgWatchTime: "N/A",
+      peakCCV: "N/A",
+      totalLikes: "0"
+    },
+    tags: ["Gaming", "Just Chatting", "IRL", "War Thunder", "Wyoming"],
+    tier: "new",
+    liveUrl: "https://www.tiktok.com/@papa.j547/live",
+    socials: {
+      tiktok: "https://www.tiktok.com/@papa.j547",
+      twitch: "https://www.twitch.tv/Gaming_With_Papa_J",
+      discord: "https://discordapp.com/users/pwnll307"
+    }
+  },
+  {
+    id: "itsjakee_78",
+    name: "ItsJakee_78",
+    handle: "@itsjakee_78",
+    description: "I’m a gaming creator posting Warzone gameplay, gaming memes, and fun squad moments.",
+    image: "/branding/KYRAX425.png",
+    category: "Gaming",
+    stats: {
+      followers: "New",
+      avgWatchTime: "N/A",
+      peakCCV: "N/A",
+      totalLikes: "0"
+    },
+    tags: ["Gaming", "Warzone", "Memes", "Squad"],
+    tier: "new",
+    liveUrl: "https://www.tiktok.com/@itsjakee_78/live",
+    socials: {
+      tiktok: "https://www.tiktok.com/@itsjakee_78",
+      twitch: "https://m.twitch.tv/itsjakee_78",
+      youtube: "https://m.youtube.com/@ItsJakee_78",
+      instagram: "https://www.instagram.com/itsjakee_78?igsh=MWl5anRybnh6aXZlaQ%3D%3D&utm_source=qr",
+      website: "https://kick.com/itsjakee-78"
+    }
   }
 ];
 

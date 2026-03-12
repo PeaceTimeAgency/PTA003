@@ -7,39 +7,28 @@ import { useRouter } from "next/navigation";
 import { creators, Creator } from "@/lib/creators";
 import { Section } from "@/components/layout/Section";
 
+import { CreatorMediaBox } from "@/components/ui/CreatorMediaBox";
+
 const CreatorCardImage = ({ creator }: { creator: Creator }) => {
   const images = creator.images && creator.images.length > 0 ? creator.images : [creator.image];
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    if (images.length <= 1) return;
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 4000); // 4 seconds for a slow transition
-
-    return () => clearInterval(interval);
-  }, [images]);
-
+  
   return (
-    <div className="relative w-full h-full">
-      {images.map((img, idx) => (
-        <motion.img
-          key={img}
-          src={img}
-          alt={`${creator.name} ${idx}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: currentIndex === idx ? 1 : 0 }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 blur-sm group-hover:blur-none"
-        />
-      ))}
-    </div>
+    <CreatorMediaBox
+      images={images}
+      name={creator.name}
+      imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 blur-sm group-hover:blur-none"
+    />
   );
 };
 
-const CreatorGrid = ({ title, desc, list, isLiveSection = false, isUserSection = false }: { title: string, desc?: string, list: Creator[], isLiveSection?: boolean, isUserSection?: boolean }) => {
+const CreatorGrid = ({ title, desc, list, liveHandles = [], isUserSection = false }: { title: string, desc?: string, list: Creator[], liveHandles?: string[], isUserSection?: boolean }) => {
   const router = useRouter();
+
+  const isCreatorLive = (creator: Creator) => {
+    const handle = creator.handle.toLowerCase();
+    return liveHandles.includes(handle) || 
+           (creator.liveUrl && liveHandles.some(lh => creator.liveUrl?.toLowerCase().includes(lh.toLowerCase())));
+  };
 
   if (list.length === 0) return null;
   return (
@@ -49,93 +38,96 @@ const CreatorGrid = ({ title, desc, list, isLiveSection = false, isUserSection =
         {desc && <p className="text-foreground-muted mt-2 text-sm">{desc}</p>}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {list.map((creator, i) => (
-          <motion.div
-            key={creator.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-          >
-            <Link href={creator.tier === 'recruiter' ? `/recruiters/${creator.id}` : `/creators/${creator.id}`} className="block group relative h-full">
-              <div className={`relative overflow-hidden rounded-3xl glass-card transition-all duration-500 group-hover:scale-[1.02] h-full flex flex-col ${isLiveSection ? 'shadow-[0_0_30px_rgba(255,60,95,0.3)] ring-1 ring-primary' : 'group-hover:shadow-neon-primary'}`}>
-                {/* Image Container */}
-                <div className="aspect-[4/5] overflow-hidden relative">
-                  {isLiveSection && (
-                    <div className="absolute top-3 left-4 z-20 flex items-center gap-1.5 bg-primary px-2.5 py-1 rounded shadow-lg shadow-black/50">
-                      <span className="w-1.5 h-1.5 rounded-full bg-foreground-inverse animate-pulse" />
-                      <span className="text-[10px] font-black text-foreground-inverse tracking-widest uppercase">Live</span>
-                    </div>
-                  )}
-                  {isUserSection && (
-                    <div className="absolute top-3 left-4 z-20 flex items-center gap-1.5 bg-green-500 px-2.5 py-1 rounded shadow-lg shadow-black/50">
-                      <span className="text-[10px] font-black text-white tracking-widest uppercase">You</span>
-                    </div>
-                  )}
-                  <CreatorCardImage creator={creator} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-black/20 to-transparent opacity-80" />
-                </div>
-
-                {/* Content Overlay */}
-                <div className="absolute inset-x-0 bottom-0 p-5 mt-auto bg-gradient-to-t from-black/80 to-transparent text-left">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="h-px w-4 bg-primary" />
-                    <span className="text-[10px] font-bold text-primary tracking-widest uppercase truncate">
-                      {creator.title ? creator.title : creator.category.replace('Agency Staff', 'Staff').replace(/\s+and\s+/gi, ' / ')}
-                    </span>
+        {list.map((creator, i) => {
+          const isLive = isCreatorLive(creator);
+          return (
+            <motion.div
+              key={creator.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+            >
+              <Link href={creator.tier === 'recruiter' ? `/recruiters/${creator.id}` : `/creators/${creator.id}`} className="block group relative h-full">
+                <div className={`relative overflow-hidden rounded-3xl glass-card transition-all duration-500 group-hover:scale-[1.02] h-full flex flex-col ${isLive ? 'shadow-[0_0_30px_rgba(255,60,95,0.3)] ring-1 ring-primary' : 'group-hover:shadow-neon-primary'}`}>
+                  {/* Image Container */}
+                  <div className="aspect-[4/5] overflow-hidden relative">
+                    {isLive && (
+                      <div className="absolute top-3 left-4 z-20 flex items-center gap-1.5 bg-primary px-2.5 py-1 rounded shadow-lg shadow-black/50">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                        <span className="text-[10px] font-black text-white tracking-widest uppercase">Live</span>
+                      </div>
+                    )}
+                    {isUserSection && (
+                      <div className="absolute top-3 left-4 z-20 flex items-center gap-1.5 bg-green-500 px-2.5 py-1 rounded shadow-lg shadow-black/50">
+                        <span className="text-[10px] font-black text-white tracking-widest uppercase">You</span>
+                      </div>
+                    )}
+                    <CreatorCardImage creator={creator} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-black/20 to-transparent opacity-80" />
                   </div>
-                  <h4 className="text-xl font-black text-foreground group-hover:text-primary transition-colors duration-300 truncate [text-shadow:0_0_1.5px_rgba(0,0,0,0.8)]">
-                    {creator.name}
-                  </h4>
-                  <p className="text-xs text-foreground/50 font-mono mt-0.5 group-hover:text-foreground/80 transition-colors truncate">
-                    {creator.handle}
-                  </p>
 
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {creator.tags.slice(0, 2).map(tag => (
-                      <span key={tag} className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-foreground/5 text-foreground/40 border border-foreground/10 uppercase tracking-tighter truncate max-w-full">
-                        {tag}
+                  {/* Content Overlay */}
+                  <div className="absolute inset-x-0 bottom-0 p-5 mt-auto bg-gradient-to-t from-black/80 to-transparent text-left">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="h-px w-4 bg-primary" />
+                      <span className="text-[10px] font-bold text-primary tracking-widest uppercase truncate">
+                        {creator.title ? creator.title : creator.category.replace('Agency Staff', 'Staff').replace(/\s+and\s+/gi, ' / ')}
                       </span>
-                    ))}
-                  </div>
-
-                  {creator.tier === 'recruiter' && (
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        router.push(`/apply?recruiter=${creator.id}`);
-                      }}
-                      className="mt-4 w-full py-2.5 text-center border border-primary/40 rounded-lg text-[10px] font-black text-primary uppercase tracking-widest hover:bg-primary hover:text-white transition-all duration-300 shadow-[0_0_10px_rgba(255,60,95,0.1)]"
-                    >
-                      Interview for {creator.name.split(' ')[0]}
-                    </button>
-                  )}
-                </div>
-
-                {/* Hover stats reveal */}
-                <div className="absolute top-4 right-4 text-right transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                  <div className="text-lg font-black text-primary drop-shadow-md">
-                    {creator.stats.followers}
-                  </div>
-                  <div className="text-[9px] font-bold text-foreground/40 uppercase tracking-widest leading-tight">
-                    Followers
-                  </div>
-                  {creator.stats.totalLikes && creator.stats.totalLikes !== "0" && (
-                    <div className="mt-2">
-                      <div className="text-sm font-black text-foreground drop-shadow-md">
-                        {creator.stats.totalLikes}
-                      </div>
-                      <div className="text-[9px] font-bold text-foreground/40 uppercase tracking-widest leading-tight">
-                        Likes
-                      </div>
                     </div>
-                  )}
+                    <h4 className="text-xl font-black text-foreground group-hover:text-primary transition-colors duration-300 truncate [text-shadow:0_0_1.5px_rgba(0,0,0,0.8)]">
+                      {creator.name}
+                    </h4>
+                    <p className="text-xs text-foreground/50 font-mono mt-0.5 group-hover:text-foreground/80 transition-colors truncate">
+                      {creator.handle}
+                    </p>
+
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {creator.tags.slice(0, 2).map(tag => (
+                        <span key={tag} className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-foreground/5 text-foreground/40 border border-foreground/10 uppercase tracking-tighter truncate max-w-full">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {creator.tier === 'recruiter' && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          router.push(`/apply?recruiter=${creator.id}`);
+                        }}
+                        className="mt-4 w-full py-2.5 text-center border border-primary/40 rounded-lg text-[10px] font-black text-primary uppercase tracking-widest hover:bg-primary hover:text-white transition-all duration-300 shadow-[0_0_10px_rgba(255,60,95,0.1)]"
+                      >
+                        Interview for {creator.name.split(' ')[0]}
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Hover stats reveal */}
+                  <div className="absolute top-4 right-4 text-right transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                    <div className="text-lg font-black text-primary drop-shadow-md">
+                      {creator.stats.followers}
+                    </div>
+                    <div className="text-[9px] font-bold text-foreground/40 uppercase tracking-widest leading-tight">
+                      Followers
+                    </div>
+                    {creator.stats.totalLikes && creator.stats.totalLikes !== "0" && (
+                      <div className="mt-2">
+                        <div className="text-sm font-black text-foreground drop-shadow-md">
+                          {creator.stats.totalLikes}
+                        </div>
+                        <div className="text-[9px] font-bold text-foreground/40 uppercase tracking-widest leading-tight">
+                          Likes
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Link>
-          </motion.div>
-        ))}
+              </Link>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
@@ -239,7 +231,7 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
               title="Live Now"
               desc="Roster members currently broadcasting."
               list={liveRoster}
-              isLiveSection={true}
+              liveHandles={liveHandles}
             />
           )}
 
@@ -283,6 +275,7 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
                   title={`${selectedTag} Creators`}
                   desc={`Showing creators specialized in ${selectedTag}.`}
                   list={filteredCreators}
+                  liveHandles={liveHandles}
                 />
               ) : (
                 <div className="flex flex-col">
@@ -290,17 +283,20 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
                     title="Agency Staff"
                     desc="The leadership driving Peace Time Agency."
                     list={filteredCreators.filter(c => c.tier === 'staff')}
+                    liveHandles={liveHandles}
                   />
                   <CreatorGrid
                     title="Recruiters"
                     desc="Talent acquisition."
                     list={filteredCreators.filter(c => c.tier === 'recruiter')}
+                    liveHandles={liveHandles}
                   />
                   {!isMainPage ? (
                     <CreatorGrid
                       title="Creators Category"
                       desc="The talent of Peace Time Agency."
                       list={filteredCreators.filter(c => c.tier !== 'staff' && c.tier !== 'recruiter')}
+                      liveHandles={liveHandles}
                     />
                   ) : (
                     <>
@@ -308,11 +304,13 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
                         title="Top 5 Performing"
                         desc="Our highest performing creators."
                         list={filteredCreators.filter(c => c.tier === 'top').slice(0, 5)}
+                        liveHandles={liveHandles}
                       />
                       <CreatorGrid
                         title="5 Newest Accepted"
                         desc="The latest additions to our roster."
                         list={filteredCreators.filter(c => c.tier === 'new').slice(0, 5)}
+                        liveHandles={liveHandles}
                       />
                     </>
                   )}

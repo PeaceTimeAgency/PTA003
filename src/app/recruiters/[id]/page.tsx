@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Section } from "@/components/layout/Section";
 import { Twitter, Instagram, ArrowLeft, Users, Heart } from "lucide-react";
+import { CreatorMediaBox } from "@/components/ui/CreatorMediaBox";
 
 interface RecruiterPageProps {
     params: Promise<{ id: string }>;
@@ -52,10 +53,10 @@ export default async function RecruiterPage({ params }: RecruiterPageProps) {
                     {/* Left Column: Image */}
                     <div className="lg:col-span-5 flex flex-col h-full">
                         <div className="relative w-full h-full min-h-[500px] lg:min-h-[700px] rounded-[2rem] overflow-hidden glass-card shadow-lg shadow-black/50 border border-foreground/10 group">
-                            <img
-                                src={creator.image}
-                                alt={creator.name}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            <CreatorMediaBox
+                                images={creator.images && creator.images.length > 0 ? creator.images : [creator.image]}
+                                name={creator.name}
+                                imageClassName="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 

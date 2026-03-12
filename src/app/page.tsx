@@ -5,6 +5,7 @@ import { GrowthPhases } from "@/components/layout/GrowthPhases";
 import { FAQ } from "@/components/layout/FAQ";
 import { Footer } from "@/components/layout/Footer";
 import Testimonials from "@/components/Testimonials";
+import WhosLiveNow from "@/components/WhosLiveNow";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Hero />
       <Services />
       <GrowthPhases />
+      <WhosLiveNow />
       <OurCreators isMainPage={true} />
 
       <Testimonials />
