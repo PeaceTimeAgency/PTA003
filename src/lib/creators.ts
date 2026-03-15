@@ -172,6 +172,82 @@ export const creators: Creator[] = [
       instagram: "https://www.instagram.com/itsjakee_78?igsh=MWl5anRybnh6aXZlaQ%3D%3D&utm_source=qr",
       website: "https://kick.com/itsjakee-78"
     }
+  },
+  {
+    id: "thej3ssexpress",
+    name: "Jessica",
+    handle: "@TheJ3ssExpress",
+    title: "Group leader",
+    description: "Hey! I’m Jessica, aka TheJ3ssExpress. I’m a recruiter and The Creator Retention Manager with Peacetime, where I help support and grow creators on TikTok. Seeing creators succeed is something I’m really passionate about.\n\nOn my own streams, you’ll usually find me cozy gaming while jamming to some rock or EDM. Every now and then I’ll dive into a horror game and suffer through a few jumpscares. I also like to pop in with occasional IRL lives whether it’s just chatting or a “cook dinner with me” stream.",
+    image: "/creators/564674.jpg",
+    category: "Gaming / Just Chatting / IRL",
+    stats: {
+      followers: "N/A",
+      avgWatchTime: "N/A",
+      peakCCV: "N/A",
+      totalLikes: "0"
+    },
+    tags: ["Staff", "Recruiter", "Gaming", "Just Chatting", "IRL"],
+    tier: "recruiter",
+    liveUrl: "https://www.tiktok.com/@TheJ3ssExpress/live",
+    socials: {
+      tiktok: "https://www.tiktok.com/@TheJ3ssExpress"
+    }
+  },
+  {
+    id: "generalspuds",
+    name: "General Spuds",
+    handle: "@generalspuds",
+    title: "General Manager",
+    description: "HI! I am general Spuds. I have been creating for years and play a variety of games from FPS to RPGS. I enjoy creating a positive environment and inspiring the people I meet. Rather I am streaming or helping another creator, I love lifting people up. Positive times and Vibes",
+    image: "/creators/generalspuds.jpg",
+    category: "Gaming / Just Chatting / IRL",
+    stats: {
+      followers: "N/A",
+      avgWatchTime: "N/A",
+      peakCCV: "N/A",
+      totalLikes: "0"
+    },
+    tags: ["Staff", "Gaming", "Just Chatting", "IRL"],
+    tier: "staff",
+    liveUrl: "https://www.tiktok.com/@generalspuds",
+    socials: {
+      tiktok: "https://www.tiktok.com/@generalspuds",
+      instagram: "https://www.instagram.com/generalspuds",
+      twitch: "https://www.twitch.tv/generalspudss",
+      youtube: "https://www.youtube.com/channel/UCClmICi4Ga9r-72ylBxoxlg"
+    }
+  },
+  {
+    id: "stealyn",
+    name: "STEALYN",
+    handle: "@stealyn.vr",
+    title: "Content Coach",
+    description: "The Content Coach with no fluff, Stealyn believes great creators are built through knowledge, positivity, and mental fortitude. He is a War Thunder VR creator by passion and a blue-collar worker by trade; he knows the value of discipline, balance, and consistency. Here at PeaceTime, his focus is to build strategies around YOUR success as an individual creator! He’s not looking for just anybody; he’s looking for those ready to earn their place as an Agent of PeaceTime.",
+    image: "/creators/stealyn_1.png",
+    images: [
+      "/creators/stealyn_1.png",
+      "/creators/stealyn_2.png",
+      "/creators/stealyn_3.png",
+      "/creators/stealyn_4.png",
+      "/creators/stealyn_5.png",
+      "/creators/stealyn_6.png",
+      "/creators/stealyn_7.png"
+    ],
+    category: "Gaming",
+    stats: {
+      followers: "New",
+      avgWatchTime: "N/A",
+      peakCCV: "N/A",
+      totalLikes: "0"
+    },
+    tags: ["Staff", "Gaming", "War Thunder VR", "Coach"],
+    tier: "staff",
+    liveUrl: "https://www.tiktok.com/@stealyn.vr/live",
+    socials: {
+      tiktok: "https://www.tiktok.com/@stealyn.vr",
+      discord: "https://discord.gg/UajNn4KaQP"
+    }
   }
 ];
 
