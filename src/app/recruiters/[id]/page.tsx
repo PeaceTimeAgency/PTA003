@@ -63,7 +63,7 @@ export default async function RecruiterPage({ params }: RecruiterPageProps) {
                             {/* Category Badge */}
                             <div className="absolute top-6 left-6 flex items-center gap-2 z-10">
                                 <span className="px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-foreground/10 text-[10px] font-black text-primary uppercase tracking-widest shadow-[0_0_15px_rgba(255,60,95,0.4)]">
-                                    {creator.category}
+                                    {creator.category.join(' / ')}
                                 </span>
                             </div>
                         </div>

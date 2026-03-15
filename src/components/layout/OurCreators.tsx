@@ -72,7 +72,7 @@ const CreatorGrid = ({ title, desc, list, liveHandles = [], isUserSection = fals
                     <div className="flex items-center gap-2 mb-1.5">
                       <span className="h-px w-4 bg-primary" />
                       <span className="text-[10px] font-bold text-primary tracking-widest uppercase truncate">
-                        {creator.title ? creator.title : creator.category.replace('Agency Staff', 'Staff').replace(/\s+and\s+/gi, ' / ')}
+                        {creator.title ? creator.title : (Array.isArray(creator.category) ? creator.category.join(' / ') : creator.category)}
                       </span>
                     </div>
                     <h4 className="text-xl font-black text-foreground group-hover:text-primary transition-colors duration-300 truncate [text-shadow:0_0_1.5px_rgba(0,0,0,0.8)]">
@@ -170,14 +170,14 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
 
   // Extract all unique tags
   const allTags = isMainPage
-    ? Array.from(new Set(displayCreators.map(c => c.category))).sort()
+    ? Array.from(new Set(displayCreators.flatMap(c => c.category))).sort()
     : Array.from(new Set(creators.flatMap(c => c.tags))).sort();
 
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   // Filter creators based on the selected tag
   const filteredCreators = selectedTag
-    ? displayCreators.filter(c => isMainPage ? c.category === selectedTag : c.tags.includes(selectedTag))
+    ? displayCreators.filter(c => isMainPage ? c.category.includes(selectedTag) : c.tags.includes(selectedTag))
     : displayCreators;
 
   return (

@@ -12,7 +12,7 @@ export interface Creator {
   title?: string;
   description: string;
   image: string;
-  category: string;
+  category: string[];
   stats: CreatorStats;
   tags: string[];
   tier?: 'staff' | 'top' | 'new' | 'recruiter';
@@ -39,7 +39,7 @@ export const creators: Creator[] = [
     title: "Founder",
     description: "Hi, I’m Nick, founder of Peace Time Agency. I work directly with creators to help them grow on TikTok LIVE through stream strategy, setup guidance, and community support. My goal is simple, help creators stay consistent, improve their content, and turn streaming into real opportunity.",
     image: "/creators/baked.jpg",
-    category: "Staff / Gaming",
+    category: ["Staff", "Gaming"],
     stats: {
       followers: "N/A",
       avgWatchTime: "N/A",
@@ -60,7 +60,7 @@ export const creators: Creator[] = [
     handle: "@oopsitsjrpgtime",
     description: "Hello there my name is OopsItsJRPGTime or \"Oops\" for short! If I were to have to describe myself as a vibe it would have to be \"Chill.\" I stream mostly JRPG Games from classic to new and anywhere in between! I first fell in love with Jrpg games back on the SNES with my very first game ever Breath of Fire and from then on I was hooked! My goal for streaming has always been to make amazing friends, so will you be my friend?!",
     image: "/creators/oopsitsjrpgtime.jpg",
-    category: "Gaming",
+    category: ["Gaming"],
     stats: {
       followers: "New",
       avgWatchTime: "N/A",
@@ -85,7 +85,7 @@ export const creators: Creator[] = [
     handle: "@mrleftythehand",
     description: "I’m Mr. Lefty, a hand that somehow ended up flying planes, driving tanks, and making questionable tactical decisions in War Thunder. Whether it’s clutch moments, terrible aim, or Gaijin doing Gaijin things, Lefty’s here for random bits of chaos along the way.",
     image: "/creators/mrleftythehand.jpg",
-    category: "Gaming",
+    category: ["Gaming"],
     stats: {
       followers: "New",
       avgWatchTime: "N/A",
@@ -111,7 +111,7 @@ export const creators: Creator[] = [
     handle: "@trashsoupgaming",
     description: "Lindsey, also known as Trash (@TrashSoupGaming), is a full-time TikTok streamer who focuses on story-driven games like RPGs and well-written horror. Over time, she has built a strong, loyal community that doesn’t just show up for the games, but for the conversations, reactions, and shared experiences that happen during every stream. Lindsey believes that growth on TikTok LIVE isn’t just about numbers. It’s about building a space where people want to come back, where viewers feel part of something, and where creators can develop confidence in what they’re doing. For Lindsey, streaming isn’t just about going live. It’s about helping others find their place and grow along the way.",
     image: "/creators/IMG_5799.JPG",
-    category: "Staff / Gaming / Just Chatting",
+    category: ["Staff", "Gaming", "Just Chatting"],
     title: "Manager",
 
     stats: {
@@ -135,7 +135,7 @@ export const creators: Creator[] = [
     handle: "@papa.j547",
     description: "Just a gamer from Wyoming. I've been gaming since the Atari 2600 lol. Mostly I stream War Thunder but will occasionally change it up with something different.",
     image: "/branding/KYRAX425.png",
-    category: "Gaming / Just Chatting / IRL",
+    category: ["Gaming", "Just Chatting", "IRL"],
     stats: {
       followers: "New",
       avgWatchTime: "N/A",
@@ -157,7 +157,7 @@ export const creators: Creator[] = [
     handle: "@itsjakee_78",
     description: "I’m a gaming creator posting Warzone gameplay, gaming memes, and fun squad moments.",
     image: "/creators/image.png",
-    category: "Gaming",
+    category: ["Gaming"],
     stats: {
       followers: "New",
       avgWatchTime: "N/A",
@@ -182,7 +182,7 @@ export const creators: Creator[] = [
     title: "Group Leader",
     description: "Hey! I’m Jessica, aka TheJ3ssExpress. I’m a recruiter and The Creator Retention Manager with Peacetime, where I help support and grow creators on TikTok. Seeing creators succeed is something I’m really passionate about.\n\nOn my own streams, you’ll usually find me cozy gaming while jamming to some rock or EDM. Every now and then I’ll dive into a horror game and suffer through a few jumpscares. I also like to pop in with occasional IRL lives whether it’s just chatting or a “cook dinner with me” stream.",
     image: "/creators/564674.jpg",
-    category: "Gaming / Just Chatting / IRL",
+    category: ["Gaming", "Just Chatting", "IRL", "Recruiter"],
     stats: {
       followers: "N/A",
       avgWatchTime: "N/A",
@@ -203,7 +203,7 @@ export const creators: Creator[] = [
     title: "General Manager",
     description: "HI! I am general Spuds. I have been creating for years and play a variety of games from FPS to RPGS. I enjoy creating a positive environment and inspiring the people I meet. Rather I am streaming or helping another creator, I love lifting people up. Positive times and Vibes",
     image: "/creators/generalspuds.jpg",
-    category: "Gaming / Just Chatting / IRL",
+    category: ["Gaming", "Just Chatting", "IRL", "Staff"],
     stats: {
       followers: "N/A",
       avgWatchTime: "N/A",
@@ -236,7 +236,7 @@ export const creators: Creator[] = [
       "/creators/stealyn_6.png",
       "/creators/stealyn_7.png"
     ],
-    category: "Gaming",
+    category: ["Gaming", "Recruiter"],
     stats: {
       followers: "New",
       avgWatchTime: "N/A",

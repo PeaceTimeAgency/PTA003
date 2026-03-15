@@ -61,7 +61,7 @@ export default async function CreatorPage({ params }: CreatorPageProps) {
               {/* Category Badge */}
               <div className="absolute top-6 left-6 flex items-center gap-2 z-10">
                 <span className="px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-black text-primary uppercase tracking-widest">
-                  {creator.title || creator.category}
+                  {creator.title || creator.category.join(' / ')}
                 </span>
                 {creator.tier === 'top' && (
                   <span className="px-3 py-1.5 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 text-[10px] font-black text-primary uppercase tracking-widest shadow-[0_0_15px_rgba(255,60,95,0.4)]">
