@@ -147,14 +147,14 @@ export default async function RecruiterPage({ params }: RecruiterPageProps) {
                         </div>
 
                         {/* Interview CTA */}
-                        <div className="pt-8 border-t border-foreground/10">
+                        {/* <div className="pt-8 border-t border-foreground/10">
                             <Link
                                 href={`/apply?recruiter=${creator.id}`}
                                 className="inline-flex items-center justify-center h-16 px-10 rounded-xl font-black text-base text-foreground-inverse bg-primary hover:bg-primary-dark transition-all duration-300 hover:shadow-neon-primary uppercase tracking-widest w-full sm:w-auto shadow-xl shadow-primary/20"
                             >
                                 Interview for {creator.name}
                             </Link>
-                        </div>
+                        </div> */}
 
                     </div>
                 </div>

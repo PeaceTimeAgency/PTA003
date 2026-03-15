@@ -48,7 +48,7 @@ const CreatorGrid = ({ title, desc, list, liveHandles = [], isUserSection = fals
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
-              <Link href={creator.tier === 'recruiter' ? `/recruiters/${creator.id}` : `/creators/${creator.id}`} className="block group relative h-full">
+              <Link href={`/creators/${creator.id}`} className="block group relative h-full">
                 <div className={`relative overflow-hidden rounded-3xl glass-card transition-all duration-500 group-hover:scale-[1.02] h-full flex flex-col ${isLive ? 'shadow-[0_0_30px_rgba(255,60,95,0.3)] ring-1 ring-primary' : 'group-hover:shadow-neon-primary'}`}>
                   {/* Image Container */}
                   <div className="aspect-[4/5] overflow-hidden relative">
@@ -90,7 +90,7 @@ const CreatorGrid = ({ title, desc, list, liveHandles = [], isUserSection = fals
                       ))}
                     </div>
 
-                    {creator.tier === 'recruiter' && (
+                    {/* {creator.tier === 'recruiter' && (
                       <button
                         onClick={(e) => {
                           e.preventDefault();
@@ -101,7 +101,7 @@ const CreatorGrid = ({ title, desc, list, liveHandles = [], isUserSection = fals
                       >
                         Interview for {creator.name.split(' ')[0]}
                       </button>
-                    )}
+                    )} */}
                   </div>
 
                   {/* Hover stats reveal - Hidden when live */}
@@ -288,13 +288,7 @@ export function OurCreators({ isMainPage = false }: { isMainPage?: boolean }) {
                   <CreatorGrid
                     title="Agency Staff"
                     desc="The leadership driving Peace Time Agency."
-                    list={filteredCreators.filter(c => c.tier === 'staff')}
-                    liveHandles={liveHandles}
-                  />
-                  <CreatorGrid
-                    title="Recruiters"
-                    desc="Talent acquisition."
-                    list={filteredCreators.filter(c => c.tier === 'recruiter')}
+                    list={filteredCreators.filter(c => c.tier === 'staff' || c.tier === 'recruiter')}
                     liveHandles={liveHandles}
                   />
                   {!isMainPage ? (
